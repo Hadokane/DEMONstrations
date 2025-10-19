@@ -77,16 +77,25 @@ class TrackController extends Controller
 
     public function upload(Request $request) 
     {
-        $request->validate(['title'=>'required|string|max:255']);
-
-        Track::create([
-            'user_id'=>auth()->id(), 
-            'title'=>$request->title,
-            'audio_file_path'=>'tracks/demo.mp3', 
-            'visibility'=>'public'
+        $request->validate([
+        'title'      => ['required','string','max:255'],
+        'artist'     => ['nullable','string','max:255'],
+        'audio'      => ['required','file','mimetypes:audio/mpeg,audio/mp3,audio/wav','max:25600'],
+        'visibility' => ['required','in:public,private'],
         ]);
 
-        return back();
+        $path = $request->file('audio')->store('tracks', 'public');
+
+        Track::create([
+            'user_id'         => auth()->id(),
+            'title'           => $request->title,
+            'artist'          => $request->artist,
+            'audio_file_path' => $path,
+            'visibility'      => $request->visibility,
+            'play_count'      => 0,
+        ]);
+
+        return redirect()->route('dashboard')->with('status','Track uploaded!');
     }
 
 }

@@ -8,7 +8,7 @@
     $wows = $track->wowCount();
     $sads = $track->sadCount();
     $totalVotes = $likes + $dislikes;
-    $approval = round(($likes / $totalVotes) * 100);
+    $approval   = $totalVotes > 0 ? round(($likes / $totalVotes) * 100) : null;
 
     $orderedComments = $track->comments()->latest()->with('user')->get();
     $commentsCount   = $orderedComments->count();
@@ -18,6 +18,13 @@
             ? 'px-3 py-2 rounded border border-indigo-600 bg-indigo-600'
             : 'px-3 py-2 rounded border border-gray-300 bg-white hover:bg-gray-50';
 @endphp
+
+@if($track->audio_file_path)
+    <audio controls class="w-full mb-4">
+        <source src="{{ asset('storage/'.$track->audio_file_path) }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+@endif
 
 <div class="container mx-auto mt-6">
     <h1 class="text-2xl font-bold mb-2">{{ $track->title }}</h1>
@@ -38,7 +45,13 @@
             <button name="type" value="wow" class="{{ $btn($userReaction === 'wow') }}">😮 {{ $wows }}</button>
             <button name="type" value="sad" class="{{ $btn($userReaction === 'sad') }}">😢 {{ $sads }}</button>
         </form>
+
+        @if(!is_null($approval))
+            <p class="text-sm text-gray-500">Approval Rating: {{ $approval }}%</p>
+        @endif
     </div>
+
+
 
     <div class="mt-6">
         <h3 class="font-semibold">Add a Comment</h3>

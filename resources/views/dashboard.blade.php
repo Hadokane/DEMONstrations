@@ -6,14 +6,21 @@
     <div class="container mx-auto mt-6">
         <h1 class="text-2xl font-bold mb-4">🎧 Your Dashboard</h1>
 
-
         @if(auth()->user()->is_admin)
-            <form class="mt-6" method="POST" action="{{ route('tracks.upload') }}">
+            <form class="mb-6" method="POST" action="{{ route('tracks.upload') }}" enctype="multipart/form-data">
                 @csrf
-                <input name="title" class="border rounded p-2" placeholder="Track title">
-                <button class="ml-2 px-3 py-2 rounded">Create</button>
+                <div class="grid gap-3 md:grid-cols-4">
+                    <input name="title" class="border rounded p-2" placeholder="Track Title" required>
+                    <input name="artist" class="border rounded p-2" placeholder="Artist">
+                    <select name="visibility" class="border rounded p-2">
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                    </select>
+                    <input type="file" name="audio" accept="audio/*" class="border rounded p-2" required>
+                </div>
+                <button class="mt-3 bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Upload track</button>
+                @error('audio') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
             </form>
-            <br />
         @endif
 
         @foreach($tracks as $track)
@@ -33,7 +40,7 @@
                     $wows = $track->wowCount();
                     $sads = $track->sadCount();
                     $totalVotes = $likes + $dislikes;
-                    $approval = round(($likes / $totalVotes) * 100);
+                    $approval   = $totalVotes > 0 ? round(($likes / $totalVotes) * 100) : null;
                     $comments = $track->comments->count()
                 @endphp
 
@@ -48,7 +55,11 @@
                 </p>
 
                 <p class="text-sm text-gray-500">Total Votes: {{ $totalVotes }}%</p>
-                <p class="text-sm text-gray-500">Approval Rating: {{ $approval }}%</p>
+
+                @if(!is_null($approval))
+                    <p class="text-sm text-gray-500">Approval Rating: {{ $approval }}%</p>
+                @endif
+
                 <p class="text-sm text-gray-500">Unique Listeners: {{ $track->plays->unique('user_id')->count() }}</p>
             </div>
         @endforeach
