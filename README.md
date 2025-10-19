@@ -1,6 +1,4 @@
-<p align="center">
-![DEMONstration logo](public/img/demonstation-logo.png)
-</p>
+![DEMONstration logo](./public/img/demonstration-logo.png)
 
 ## About DEMONstration
 
