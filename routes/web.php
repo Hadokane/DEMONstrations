@@ -17,6 +17,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/tracks/{track}/play', [TrackController::class, 'recordPlay'])->name('tracks.play');
     Route::post('/tracks/{track}/reaction', [TrackController::class, 'addReaction'])->name('tracks.react');
     Route::post('/tracks/{track}/comment', [TrackController::class, 'addComment'])->name('tracks.comment');
+    Route::post('/tracks/upload', [TrackController::class, 'upload'])->name('tracks.upload');
 
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

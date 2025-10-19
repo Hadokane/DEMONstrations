@@ -25,6 +25,15 @@ class TrackController extends Controller
 
     public function show(Track $track)
     {
+        $user = auth()->user();
+        
+        if ($track->visibility === 'private'
+            && $track->user_id !== $user->id
+            && !$track->accesses()->where('user_id', $user->id)->exists()
+            ) 
+        {
+                abort(403);
+        }
         $track->load(['reactions', 'plays', 'comments.user']);
         return view('tracks.show', compact('track'));
     }
@@ -65,4 +74,19 @@ class TrackController extends Controller
 
         return back();
     }
+
+    public function upload(Request $request) 
+    {
+        $request->validate(['title'=>'required|string|max:255']);
+
+        Track::create([
+            'user_id'=>auth()->id(), 
+            'title'=>$request->title,
+            'audio_file_path'=>'tracks/demo.mp3', 
+            'visibility'=>'public'
+        ]);
+
+        return back();
+    }
+
 }

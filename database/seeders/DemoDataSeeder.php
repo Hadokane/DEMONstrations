@@ -32,7 +32,7 @@ class DemoDataSeeder extends Seeder
             );
 
             // Plays
-            TrackPlay::factory()->count(rand(15, 35))->create([
+            TrackPlay::factory()->count(rand(15, 350))->create([
                 'track_id' => $track->id,
             ]);
 
@@ -53,7 +53,7 @@ class DemoDataSeeder extends Seeder
                 'user_id'  => rand(0,1) ? $r1->id : $r2->id,
             ]);
 
-            $track->update(['play_count' => rand(10, 60)]);
+            $track->update(['play_count' => rand(10, 350)]);
         }
     }
 }
