@@ -56,6 +56,11 @@ class User extends Authenticatable
         return $this->hasMany(TrackAccess::class); 
     }
 
+    public function getNameAttribute(): string
+    {
+        return trim(($this->first_name ?? '') . ' ' . ($this->last_name ?? ''));
+    }
+
     /**
      * Get the attributes that should be cast.
      *

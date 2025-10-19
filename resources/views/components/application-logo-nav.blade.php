@@ -1,6 +1,6 @@
 <img 
     src="{{ asset('img/demonstration-logo.png') }}" 
     alt="Demonstration Logo"
-    width="300" 
-    height="300"
+    width="50" 
+    height="50"
 />
