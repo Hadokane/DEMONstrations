@@ -28,8 +28,8 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'reviewer1@example.com'],
             [
-                'first_name' => 'Reviewer',
-                'last_name' => 'Renny',
+                'first_name' => 'Renny',
+                'last_name' => 'Reviewer',
                 'password' => Hash::make('password'),
                 'is_admin' => false,
             ]
@@ -38,8 +38,8 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'reviewer2@example.com'],
             [
-                'first_name' => 'Reviewer',
-                'last_name' => 'Rita',
+                'first_name' => 'Rita',
+                'last_name' => 'Reviewer',
                 'password' => Hash::make('password'),
                 'is_admin' => false,
             ]
