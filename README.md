@@ -13,6 +13,9 @@ Users can:
 - Track metrics like unique views and track plays.
 - Follow bands and artists.
 
+## Seeder Proof
+![Seeder Proof](./public/img/seederproof.png)
+
 ### Premium Partners + Users
 
 - **[The Oversights](https://theoversights.com)**

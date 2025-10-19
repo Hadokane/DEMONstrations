@@ -17,10 +17,13 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
+    protected $fillable = 
+    [
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -33,6 +36,26 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function tracks() 
+    { 
+        return $this->hasMany(Track::class); 
+    }
+    
+    public function comments() 
+    { 
+        return $this->hasMany(Comment::class); 
+    
+    }
+    public function reactions() 
+    { 
+        return $this->hasMany(Reaction::class); 
+    }
+
+    public function trackAccesses() 
+    { 
+        return $this->hasMany(TrackAccess::class); 
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -43,6 +66,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean'
         ];
     }
 }

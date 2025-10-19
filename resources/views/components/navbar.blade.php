@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg border-bottom border-body" style="background-color: #e3f2fd;" data-bs-theme="light">
   <div class="container-fluid">
     
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="/">
         <img src="{{ asset('img/demonstration-logo.png') }}" alt="Bootstrap" width="30" height="24">
     </a>
 
