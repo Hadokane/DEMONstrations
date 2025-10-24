@@ -28,6 +28,13 @@
 
 <div class="container mx-auto mt-6">
     <h1 class="text-2xl font-bold mb-2">{{ $track->title }}</h1>
+    
+    @if($track->visibility === 'private')
+      <span class="text-xs inline-flex items-center px-2 py-0.5 rounded bg-gray-800 text-white">Private</span>
+    @else
+      <span class="text-xs inline-flex items-center px-2 py-0.5 rounded bg-emerald-600 text-white">Public</span>
+    @endif
+
     <p class="text-gray-500 mb-4">Artist: {{ $track->artist ?? 'Unknown' }}</p>
 
     <form method="POST" action="{{ route('tracks.play', $track) }}">
