@@ -32,28 +32,36 @@ class DemoDataSeeder extends Seeder
             );
 
             // Plays
-            TrackPlay::factory()->count(rand(15, 350))->create([
+            TrackPlay::factory()->count(rand(15, 100))->create([
                 'track_id' => $track->id,
             ]);
 
             // Reactions — one per reviewer
+            $reactionTypes = ['like', 'dislike', 'laugh', 'wow', 'sad'];
             Reaction::updateOrCreate(
                 ['user_id' => $r1->id, 'track_id' => $track->id],
-                ['type' => rand(0,1) ? 'like' : 'dislike']
-            );
-            
-            Reaction::updateOrCreate(
-                ['user_id' => $r2->id, 'track_id' => $track->id],
-                ['type' => rand(0,1) ? 'like' : 'dislike']
+                ['type' => $reactionTypes[array_rand($reactionTypes)]]
             );
 
+            Reaction::updateOrCreate(
+                ['user_id' => $r2->id, 'track_id' => $track->id],
+                ['type' => $reactionTypes[array_rand($reactionTypes)]]
+            );
+
+            // Add extra reactions from other generated users
+            $extraUsers = User::whereNotIn('id', [$admin->id, $r1->id, $r2->id])->get();
+            foreach ($extraUsers as $user) {
+                Reaction::updateOrCreate(
+                    ['user_id' => $user->id, 'track_id' => $track->id],
+                    ['type' => $reactionTypes[array_rand($reactionTypes)]]
+                );
+            }
+
             // Comments
-            Comment::factory()->count(rand(6,12))->create([
+            Comment::factory()->count(rand(3,12))->create([
                 'track_id' => $track->id,
                 'user_id'  => rand(0,1) ? $r1->id : $r2->id,
             ]);
-
-            $track->update(['play_count' => rand(10, 350)]);
         }
     }
 }
