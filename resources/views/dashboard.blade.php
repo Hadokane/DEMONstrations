@@ -61,8 +61,6 @@
                     💬 Comments: {{ $comments }}
                 </p>
 
-                <p class="text-sm text-gray-500">Total Votes: {{ $totalVotes }}%</p>
-
                 @if(!is_null($approval))
                     <p class="text-sm text-gray-500">Approval Rating: {{ $approval }}%</p>
                 @endif
