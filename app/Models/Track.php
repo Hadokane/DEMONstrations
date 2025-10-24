@@ -15,6 +15,12 @@ class Track extends Model
         'user_id','title','artist', 'album', 'audio_file_path','cover_image_path','visibility','duration_ms','play_count',
     ];
 
+    protected $casts = 
+    [
+        'duration_ms' => 'integer',
+        'play_count' => 'integer',
+    ];
+
     public function owner() 
     { 
         return $this->belongsTo(User::class, 'user_id'); 
@@ -39,12 +45,6 @@ class Track extends Model
     { 
         return $this->hasMany(TrackAccess::class); 
     }
-
-    protected $casts = 
-    [
-        'duration_ms' => 'integer',
-        'play_count' => 'integer',
-    ];
 
     public function likesCount(): int 
     { 
