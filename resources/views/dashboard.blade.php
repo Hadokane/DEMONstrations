@@ -14,6 +14,28 @@
             </a>
         </div>
 
+        <form method="GET" action="{{ route('dashboard') }}" class="mb-4 flex items-center space-x-2">
+            <input
+                type="text"
+                name="search"
+                value="{{ $search ?? '' }}"
+                placeholder="Search tracks/artists..."
+                class="border rounded px-3 py-1 text-sm w-64"
+            >
+
+            <select name="sort" class="border rounded px-2 py-1 text-sm">
+                <option value="popularity" {{ ($sort ?? '') === 'popularity' ? 'selected' : '' }}>Most Plays</option>
+                <option value="reactions" {{ ($sort ?? '') === 'reactions' ? 'selected' : '' }}>Most Reactions</option>
+                <option value="newest"  {{ ($sort ?? '') === 'newest' ? 'selected' : '' }}>Newest</option>
+                <option value="oldest"  {{ ($sort ?? '') === 'oldest' ? 'selected' : '' }}>Oldest</option>
+            </select>
+
+            <input type="hidden" name="filter" value="{{ $filter }}">
+            <x-primary-button class="text-sm">
+                Apply
+            </x-primary-button>
+        </form>
+
         <div class="mb-4 flex space-x-2">
             <a href="{{ route('dashboard', ['filter' => 'all']) }}"
             class="px-3 py-1 rounded text-sm {{ $filter === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700' }}">
@@ -93,5 +115,21 @@
                 @endif  
             </div>
         @endforeach
+
+        <div class="mt-6">
+            {{ $tracks->links() }}
+        </div>
+
+        @if($tracks->isEmpty())
+            <div class="border-t border-gray-300 mt-4">
+                <h2><strong>No tracks found.</strong></h2>
+                <img src="{{ asset('img/empty-demon.png') }}" 
+                alt="Empty Container Demon"
+                class=""
+                width="120" 
+                height="120">
+            </div>
+        @endif
+        
     </div>
 </x-app-layout>

@@ -11,7 +11,11 @@ class TrackController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        
         $filter = $request->query('filter', 'all');
+        $search = $request->query('search');
+        $sort   = $request->query('sort', 'newest');
+
         $query = Track::query()->with(['reactions', 'plays', 'comments']);
         
         if ($filter === 'mine') 
@@ -37,10 +41,41 @@ class TrackController extends Controller
                 ->orWhere('user_id', $user->id)
                 ->orWhereHas('accesses', fn($q) => $q->where('user_id', $user->id));
         }
+
+        if ($search) 
+        {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhereHas('owner', fn ($q2) =>
+                    $q2->where('artist_name', 'like', "%{$search}%")
+                );
+            }); 
+        }
+
+        if ($sort === 'popularity') 
+        {
+            $query->orderByDesc('play_count');
+        } 
+        elseif ($sort === 'newest') 
+        {
+            $query->latest();
+        }
+        elseif ($sort === 'oldest') 
+        {
+            $query->oldest();
+        }
+        elseif ($sort === 'reactions') 
+        {
+            $query->withCount('reactions')->orderByDesc('reactions_count');
+        }
+        else 
+        {
+            $query->latest();
+        }
         
-        $tracks = $query->get();
+        $tracks = $query->paginate(5)->withQueryString();
         
-        return view('dashboard', compact('tracks', 'user', 'filter'));
+        return view('dashboard', compact('tracks', 'user', 'filter', 'search', 'sort'));
     }
 
     public function show(Track $track)
@@ -55,10 +90,6 @@ class TrackController extends Controller
                 abort(403);
         }
         $track->load(['reactions', 'plays', 'comments.user']);
-
-        $userReaction = $track->reactions
-        ->firstWhere('user_id', $user->id);
-
         return view('tracks.show', compact('track'));
     }
 
