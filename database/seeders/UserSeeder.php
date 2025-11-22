@@ -44,5 +44,8 @@ class UserSeeder extends Seeder
                 'is_admin' => false,
             ]
         );
+
+        // Generate additional random users
+        User::factory()->count(20)->create();
     }
 }
