@@ -72,19 +72,28 @@
 
         <div class="bg-white shadow sm:rounded-lg p-6">
             <h2 class="text-xl font-semibold mb-3">Comments ({{ $user->comments->count() }})</h2>
-            @forelse($user->comments as $comment)
-                <div class="border-b py-2">
-                    <p class="text-sm">{{ $comment->body }}</p>
-                    <p class="text-xs text-gray-500">
-                        On track:
-                        <a href="{{ route('tracks.show', $comment->track) }}" class="text-indigo-600 hover:underline">
+            @forelse ($user->comments as $comment)
+                <div class="border-b py-2 text-sm">
+                    <div class="flex justify-between">
+                        <a href="{{ route('tracks.show', $comment->track) }}" class="font-semibold text-indigo-600 hover:underline">
                             {{ $comment->track->title }}
                         </a>
-                        • {{ $comment->created_at }}
-                    </p>
+                        <span class="text-xs text-gray-500">
+                            {{ $comment->created_at->diffForHumans() }}
+                        </span>
+                    </div>
+                    <p>{{ $comment->body }}</p>
+
+                    <form method="POST" action="{{ route('admin.comments.destroy', $comment) }}" class="mt-1">
+                        @csrf
+                        @method('DELETE')
+                        <button class="text-xs text-red-600 hover:underline">
+                            Delete Comment
+                        </button>
+                    </form>
                 </div>
             @empty
-                <p class="text-sm text-gray-500">No comments left.</p>
+                <p class="text-sm text-gray-500">No comments from this user yet.</p>
             @endforelse
         </div>
     </div>

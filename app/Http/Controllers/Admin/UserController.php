@@ -64,7 +64,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user->load(['tracks', 'comments.track']);
+        $user->load(['tracks', 'comments.track', 'reactions.track',]);
         return view('admin.users.show', compact('user'));
     }
 
