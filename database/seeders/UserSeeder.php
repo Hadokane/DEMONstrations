@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // Hard-Code some Reviewers
+        // Hard-Code some Reviewers (non-admins)
         User::updateOrCreate(
             ['email' => 'reviewer1@example.com'],
             [

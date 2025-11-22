@@ -18,7 +18,7 @@ class TrackFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => User::inRandomOrder()->first()->id ?? User::factory(),
             'title' => fake()->sentence(3),
             'artist' => fake()->name(),
             'audio_file_path' => 'tracks/'.fake()->uuid().'.mp3',

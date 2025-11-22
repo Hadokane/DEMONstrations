@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('title');
-            $table->string('artist')->nullable()->default(null);
-            $table->string('album')->nullable();
+            $table->string('artist');
+            $table->string('album')->nullable()->default(null);
             $table->string('audio_file_path');
             $table->string('cover_image_path')->nullable()->default(null);
             $table->enum('visibility', ['private','public'])->default('private');

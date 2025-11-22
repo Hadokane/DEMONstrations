@@ -19,10 +19,10 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
-            'track_id' => Track::factory(),
+            'user_id' => User::inRandomOrder()->first()->id ?? User::factory(),
+            'track_id' => Track::inRandomOrder()->first()->id ?? Track::factory(),
             'body' => fake()->sentences(mt_rand(1,3), true),
-            'timestamp_ms' => fake()->boolean(70) ? fake()->numberBetween(0, 180_000) : null,
+            'timestamp_ms' => fake()->numberBetween(0, 200000),
         ];
     }
 }

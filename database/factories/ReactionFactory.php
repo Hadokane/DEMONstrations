@@ -19,8 +19,8 @@ class ReactionFactory extends Factory
     public function definition(): array
     {
     return [
-        'user_id' => User::factory(),
-        'track_id' => Track::factory(),
+        'user_id' => User::inRandomOrder()->first()->id ?? User::factory(),
+        'track_id' => Track::inRandom()->first()->id ?? Track::factory(),
         'type' => fake()->randomElement(['like','dislike','laugh','wow','sad']),
     ];
     }
