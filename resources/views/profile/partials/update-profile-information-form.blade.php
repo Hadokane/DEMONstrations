@@ -1,11 +1,11 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
+            {{ ('Profile Information') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ ("Update your account's profile information and email address.") }}
         </p>
     </header>
 
@@ -18,41 +18,41 @@
         @method('patch')
 
         <div>
-            <x-input-label for="artist_name" :value="__('Artist Name')" />
+            <x-input-label for="artist_name" :value="('Artist Name')" />
             <x-text-input id="artist_name" name="artist_name" type="text" class="mt-1 block w-full" :value="old('artist_name', $user->artist_name)" required autofocus autocomplete="nickname" />
             <x-input-error class="mt-2" :messages="$errors->get('artist_name')" />
         </div>
 
         <div>
-            <x-input-label for="first_name" :value="__('First Name')" />
+            <x-input-label for="first_name" :value="('First Name')" />
             <x-text-input id="first_name" name="first_name" type="text" class="mt-1 block w-full" :value="old('first_name', $user->first_name)" required autofocus autocomplete="given-name" />
             <x-input-error class="mt-2" :messages="$errors->get('first_name')" />
         </div>
 
         <div>
-            <x-input-label for="last_name" :value="__('Last Name')" />
+            <x-input-label for="last_name" :value="('Last Name')" />
             <x-text-input id="last_name" name="last_name" type="text" class="mt-1 block w-full" :value="old('last_name', $user->last_name)" required autofocus autocomplete="family-name" />
             <x-input-error class="mt-2" :messages="$errors->get('last_name')" />
         </div>
 
         <div>
-            <x-input-label for="email" :value="__('Email')" />
+            <x-input-label for="email" :value="('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
                     <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
+                        {{ ('Your email address is unverified.') }}
 
                         <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
+                            {{ ('Click here to re-send the verification email.') }}
                         </button>
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
                         <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
+                            {{ ('A new verification link has been sent to your email address.') }}
                         </p>
                     @endif
                 </div>
@@ -60,7 +60,7 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <x-primary-button>{{ ('Save') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')
                 <p
@@ -69,7 +69,7 @@
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
                     class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                >{{ ('Saved.') }}</p>
             @endif
         </div>
     </form>
