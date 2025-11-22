@@ -15,6 +15,9 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('tracks.upload.form')" :active="request()->routeIs('tracks.upload.form')">
+                        + Upload
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -33,6 +36,12 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        @if(auth()->user()->is_admin)
+                            <x-dropdown-link href="{{ route('admin.users.index') }}">
+                                {{ __('Admin Panel') }}
+                            </x-dropdown-link>
+                        @endif
+
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
@@ -68,6 +77,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('tracks.upload.form')" :active="request()->routeIs('tracks.upload.form')">
+                + Upload
             </x-responsive-nav-link>
         </div>
 

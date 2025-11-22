@@ -1,5 +1,11 @@
 <x-app-layout>
     
+@php
+    $canManage = auth()->check() && (
+        auth()->id() === $track->user_id || auth()->user()->is_admin
+    );
+@endphp
+
 @php 
     $plays = $track->plays->count();
     $likes = $track->likesCount();
@@ -37,6 +43,13 @@
 
     <p class="text-gray-500 mb-4">Artist: {{ $track->owner->artist_name }}</p>
 
+    @if($canManage)
+        <a href="{{ route('tracks.edit', $track) }}"
+           class="inline-flex items-center px-3 py-2 text-sm rounded bg-indigo-600 text-white hover:bg-indigo-700">
+            Edit Track
+        </a>
+    @endif
+
     <form method="POST" action="{{ route('tracks.play', $track) }}">
         @csrf
         <button class="inline-flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded">⏯️ Play - {{ $plays }} Plays</button>
@@ -57,8 +70,6 @@
             <p class="text-sm text-gray-500">Approval Rating: {{ $approval }}%</p>
         @endif
     </div>
-
-
 
     <div class="mt-6">
         <h3 class="font-semibold">Add a Comment</h3>
@@ -84,7 +95,6 @@
             </div>
         @endforeach
     </div>
-
 </div>
 
 </x-app-layout>

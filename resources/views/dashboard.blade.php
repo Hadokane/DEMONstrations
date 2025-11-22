@@ -6,23 +6,42 @@
     <div class="container mx-auto mt-6">
         <h1 class="text-2xl font-bold mb-4">🎧 Your Dashboard</h1>
 
-        @if(auth()->user()->is_admin)
-            <form class="mb-6" method="POST" action="{{ route('tracks.upload') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="grid gap-3 md:grid-cols-4">
-                    <input name="title" class="border rounded p-2" placeholder="Track Title" required>
-                    <select name="visibility" class="border rounded p-2">
-                        <option value="public">Public</option>
-                        <option value="private">Private</option>
-                    </select>
-                    <input type="file" name="audio" accept="audio/*" class="border rounded p-2" required>
-                </div>
-                <button class="mt-3 bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Upload track</button>
-                @error('audio') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
-            </form>
-        @endif
+        <div class="flex justify-end m-2">
+            <a href="{{ route('tracks.upload.form') }}">
+                <x-primary-button>
+                    Upload Track
+                </x-primary-button>
+            </a>
+        </div>
+
+        <div class="mb-4 flex space-x-2">
+            <a href="{{ route('dashboard', ['filter' => 'all']) }}"
+            class="px-3 py-1 rounded text-sm {{ $filter === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                All
+            </a>
+            <a href="{{ route('dashboard', ['filter' => 'mine']) }}"
+            class="px-3 py-1 rounded text-sm {{ $filter === 'mine' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                My Tracks
+            </a>
+            <a href="{{ route('dashboard', ['filter' => 'shared']) }}"
+            class="px-3 py-1 rounded text-sm {{ $filter === 'shared' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                Shared with Me
+            </a>
+            <a href="{{ route('dashboard', ['filter' => 'public']) }}"
+            class="px-3 py-1 rounded text-sm {{ $filter === 'public' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                Public Tracks
+            </a>
+            <a href="{{ route('dashboard', ['filter' => 'private']) }}"
+            class="px-3 py-1 rounded text-sm {{ $filter === 'private' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                Private Tracks
+            </a>
+        </div>
 
         @foreach($tracks as $track)
+            @php
+                $canManage = auth()->id() === $track->user_id || auth()->user()->is_admin;
+            @endphp
+
             <div class="bg-white shadow rounded p-4 mb-4">
                 <h2 class="text-xl font-semibold"> 
                     <a href="{{ route('tracks.show', $track) }}">
@@ -65,8 +84,14 @@
                 @endif
 
                 <p class="text-sm text-gray-500">Unique Listeners: {{ $track->plays->unique('user_id')->count() }}</p>
+                
+                @if($canManage)
+                    <a href="{{ route('tracks.edit', $track) }}"
+                        class="text-sm text-indigo-600 hover:underline">
+                        Edit
+                    </a>
+                @endif  
             </div>
         @endforeach
     </div>
-
 </x-app-layout>
