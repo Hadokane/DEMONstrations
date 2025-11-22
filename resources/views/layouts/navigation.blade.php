@@ -16,7 +16,7 @@
                         {{ ('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('tracks.upload.form')" :active="request()->routeIs('tracks.upload.form')">
-                        + Upload
+                        Upload Track
                     </x-nav-link>
                 </div>
             </div>
@@ -79,7 +79,7 @@
                 {{ ('Dashboard') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('tracks.upload.form')" :active="request()->routeIs('tracks.upload.form')">
-                + Upload
+                Upload Track
             </x-responsive-nav-link>
         </div>
 

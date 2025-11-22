@@ -101,7 +101,10 @@ class TrackController extends Controller
         ]);
 
         $track->increment('play_count');
-        return back();
+        return redirect()->route('tracks.show', [
+            'track' => $track->id,
+            'play' => 1
+        ]);
     }
 
     public function addReaction(Request $request, Track $track)

@@ -9,7 +9,7 @@
         <div class="flex justify-end m-2">
             <a href="{{ route('tracks.upload.form') }}">
                 <x-primary-button>
-                    Upload Track
+                    + Upload Track
                 </x-primary-button>
             </a>
         </div>
