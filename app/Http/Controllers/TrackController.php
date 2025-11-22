@@ -79,7 +79,6 @@ class TrackController extends Controller
     {
         $request->validate([
         'title'      => ['required','string','max:255'],
-        'artist'     => ['nullable','string','max:255'],
         'audio'      => ['required','file','mimetypes:audio/mpeg,audio/mp3,audio/wav','max:25600'],
         'visibility' => ['required','in:public,private'],
         ]);
@@ -89,7 +88,6 @@ class TrackController extends Controller
         Track::create([
             'user_id'         => auth()->id(),
             'title'           => $request->title,
-            'artist'          => $request->artist,
             'audio_file_path' => $path,
             'visibility'      => $request->visibility,
             'play_count'      => 0,

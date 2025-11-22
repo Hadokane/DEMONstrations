@@ -17,10 +17,11 @@ class TrackFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::inRandomOrder()->first() ?? User::factory()->create();
+
         return [
-            'user_id' => User::inRandomOrder()->first()->id ?? User::factory(),
+            'user_id' => $user->id,
             'title' => fake()->sentence(3),
-            'artist' => fake()->name(),
             'audio_file_path' => 'tracks/'.fake()->uuid().'.mp3',
             'cover_image_path' => null,
             'duration_ms' => fake()->numberBetween(60000, 240000),

@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = 
     [
+        'artist_name',
         'first_name',
         'last_name',
         'email',
@@ -59,6 +60,11 @@ class User extends Authenticatable
     public function getNameAttribute(): string
     {
         return trim(($this->first_name ?? '') . ' ' . ($this->last_name ?? ''));
+    }
+
+    public function getDisplayNameAttribute(): string
+    {
+        return $this->artist_name ?? $this->getNameAttribute();
     }
 
     /**

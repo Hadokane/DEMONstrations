@@ -18,6 +18,12 @@
         @method('patch')
 
         <div>
+            <x-input-label for="artist_name" :value="__('Artist Name')" />
+            <x-text-input id="artist_name" name="artist_name" type="text" class="mt-1 block w-full" :value="old('artist_name', $user->artist_name)" required autofocus autocomplete="nickname" />
+            <x-input-error class="mt-2" :messages="$errors->get('artist_name')" />
+        </div>
+
+        <div>
             <x-input-label for="first_name" :value="__('First Name')" />
             <x-text-input id="first_name" name="first_name" type="text" class="mt-1 block w-full" :value="old('first_name', $user->first_name)" required autofocus autocomplete="given-name" />
             <x-input-error class="mt-2" :messages="$errors->get('first_name')" />

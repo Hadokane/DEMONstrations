@@ -11,7 +11,6 @@
                 @csrf
                 <div class="grid gap-3 md:grid-cols-4">
                     <input name="title" class="border rounded p-2" placeholder="Track Title" required>
-                    <input name="artist" class="border rounded p-2" placeholder="Artist">
                     <select name="visibility" class="border rounded p-2">
                         <option value="public">Public</option>
                         <option value="private">Private</option>
@@ -37,7 +36,7 @@
                     <span class="text-xs inline-flex items-center px-2 py-0.5 rounded bg-emerald-600 text-white">Public</span>
                 @endif  
                 
-                <p class="text-gray-600">Artist: {{ $track->artist ?? 'Unknown' }}</p>
+                <p class="text-gray-600">Artist: {{ $track->owner->artist_name }}</p>
 
                 @php 
                     $plays = $track->plays->count();

@@ -12,7 +12,7 @@ class Track extends Model
 
     protected $fillable = 
     [
-        'user_id','title','artist', 'album', 'audio_file_path','cover_image_path','visibility','duration_ms','play_count',
+        'user_id','title', 'album', 'audio_file_path','cover_image_path','visibility','duration_ms','play_count',
     ];
 
     protected $casts = 

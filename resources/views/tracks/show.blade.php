@@ -35,7 +35,7 @@
       <span class="text-xs inline-flex items-center px-2 py-0.5 rounded bg-emerald-600 text-white">Public</span>
     @endif
 
-    <p class="text-gray-500 mb-4">Artist: {{ $track->artist ?? 'Unknown' }}</p>
+    <p class="text-gray-500 mb-4">Artist: {{ $track->owner->artist_name }}</p>
 
     <form method="POST" action="{{ route('tracks.play', $track) }}">
         @csrf

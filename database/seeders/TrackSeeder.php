@@ -17,6 +17,7 @@ class TrackSeeder extends Seeder
     public function run(): void
     {
         $admin = User::where('email','admin@example.com')->firstOrFail();
+        $users = User::all();
 
         // Use demo audio for seeding from public folder
         $sourceDir = base_path('database/seeders/audio');
@@ -33,7 +34,6 @@ class TrackSeeder extends Seeder
                     Track::create([
                         'user_id'         => $admin->id,
                         'title'           => $file->getFilenameWithoutExtension(),
-                        'artist'          => 'DEMONstration',
                         'audio_file_path' => $dest,   
                         'visibility'      => $i === 0 ? 'private' : 'public',
                         'play_count'      => 0,
@@ -56,8 +56,11 @@ class TrackSeeder extends Seeder
         ]);
 
         // 3 Additional tracks
-        Track::factory()->count(3)->create([
-            'user_id' => $admin->id,
-        ]);
+        for ($i = 0; $i < 5; $i++) {
+            $user = $users->random();
+            Track::factory()->create([
+                'user_id' => $user->id,
+            ]);
+        }
     }
 }
