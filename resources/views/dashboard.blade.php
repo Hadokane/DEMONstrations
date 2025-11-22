@@ -14,6 +14,61 @@
             </a>
         </div>
 
+        <div class="mt-4 mb-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white shadow rounded p-4">
+                <h3 class="text-lg font-semibold mb-3">🗣️ Your Recent Comments</h3>
+
+                @forelse ($recentComments as $comment)
+                    <div class="border-b py-2 text-sm">
+                        <div class="flex justify-between">
+                            <a href="{{ route('tracks.show', $comment->track) }}" class="font-semibold text-indigo-600 hover:underline">
+                                {{ $comment->track->title }}
+                            </a>
+                            <span class="text-xs text-gray-500">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </span>
+                        </div>
+                        <p>{{ $comment->body }}</p>
+                    </div>
+                @empty
+                    <p class="text-sm text-gray-500">You haven’t left any comments yet.</p>
+                @endforelse
+            </div>
+            <div class="bg-white shadow rounded p-4">
+                <h3 class="text-lg font-semibold mb-3">🎭 Your Recent Reactions</h3>
+
+                @forelse ($recentReactions as $reaction)
+                    <div class="border-b py-2 text-sm flex justify-between items-center">
+                        <div>
+                            <a href="{{ route('tracks.show', $reaction->track) }}" class="font-semibold text-indigo-600 hover:underline">
+                                {{ $reaction->track->title }}
+                            </a>
+                            <p class="text-xs text-gray-500">
+                                {{ $reaction->created_at->diffForHumans() }}
+                            </p>
+                        </div>
+                        <div>
+                            @php
+                                $icons = [
+                                    'like'    => '👍',
+                                    'dislike' => '👎',
+                                    'laugh'   => '😂',
+                                    'wow'     => '😮',
+                                    'sad'     => '😢',
+                                ];
+                            @endphp
+                            <span class="text-xl">
+                                {{ $icons[$reaction->type] ?? '❓' }}
+                            </span>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-sm text-gray-500">You haven’t reacted to any tracks yet.</p>
+                @endforelse
+            </div>
+    </div>
+
+
         <form method="GET" action="{{ route('dashboard') }}" class="mb-4 flex items-center space-x-2">
             <input
                 type="text"

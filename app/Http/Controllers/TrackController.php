@@ -75,7 +75,19 @@ class TrackController extends Controller
         
         $tracks = $query->paginate(5)->withQueryString();
         
-        return view('dashboard', compact('tracks', 'user', 'filter', 'search', 'sort'));
+        $recentComments = $user->comments()
+            ->with('track')
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        $recentReactions = $user->reactions()
+            ->with('track')
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        return view('dashboard', compact('tracks', 'user', 'filter', 'search', 'sort', 'recentComments', 'recentReactions'));
     }
 
     public function show(Track $track)
