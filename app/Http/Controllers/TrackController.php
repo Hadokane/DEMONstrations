@@ -319,4 +319,13 @@ class TrackController extends Controller
 
         return back()->with('status', 'Access revoked for '.$user->artist_name.'.');
     }
+
+    public function clearReaction(Track $track)
+    {
+        Reaction::where('user_id', Auth::id())
+            ->where('track_id', $track->id)
+            ->delete();
+
+        return back();
+    }
 }

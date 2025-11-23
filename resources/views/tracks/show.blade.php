@@ -150,6 +150,19 @@
                 <button name="type" value="sad" class="{{ $btn($userReaction === 'sad') }}">😢 {{ $sads }}</button>
             </form>
             
+            @if($userReaction)
+                <form method="POST"
+                    action="{{ route('tracks.reaction.clear', $track) }}"
+                    class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                            class="text-xs text-gray-500 hover:text-red-600 hover:underline mt-1 mb-2">
+                        Clear reaction
+                    </button>
+                </form>
+            @endif
+
             @if(!is_null($approval))
             <p class="text-sm text-gray-500">Approval Rating: {{ $approval }}%</p>
             @endif
