@@ -8,6 +8,7 @@
                 <th class="py-2 pr-4">Track</th>
                 <th class="py-2 pr-4">Comment</th>
                 <th class="py-2 pr-4">When</th>
+                <th class="py-2 pr-4"></th>
             </tr>
             </thead>
             <tbody>
