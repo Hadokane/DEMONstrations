@@ -21,7 +21,6 @@ class TrackAccessFactory extends Factory
         return [
             'track_id' => Track::factory(),
             'user_id' => User::factory(),
-            'granted_by' => User::factory(),
         ];
     }
 }

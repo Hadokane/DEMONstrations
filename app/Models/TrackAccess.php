@@ -10,7 +10,7 @@ class TrackAccess extends Model
     /** @use HasFactory<\Database\Factories\TrackAccessFactory> */
     use HasFactory;
 
-    protected $fillable = ['track_id','user_id','granted_by'];
+    protected $fillable = ['track_id','user_id'];
 
     protected $casts = ['expires_at' => 'datetime'];
 
@@ -22,11 +22,6 @@ class TrackAccess extends Model
     public function user() 
     { 
         return $this->belongsTo(User::class); 
-    }
-
-    public function granter() 
-    { 
-        return $this->belongsTo(User::class, 'granted_by'); 
     }
 
 }

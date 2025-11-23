@@ -29,7 +29,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/tracks/{track}/play', [TrackController::class, 'recordPlay'])->name('tracks.play');
     Route::post('/tracks/{track}/reaction', [TrackController::class, 'addReaction'])->name('tracks.react');
     Route::post('/tracks/{track}/comment', [TrackController::class, 'addComment'])->name('tracks.comment');
-    
+    Route::post('/tracks/{track}/share', [TrackController::class, 'share'])->name('tracks.share');
+    Route::delete('/tracks/{track}/share/{user}', [TrackController::class, 'unshare'])->name('tracks.unshare');
+
     //Comment Routes
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 

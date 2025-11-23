@@ -169,6 +169,23 @@
                 </div>
             @endif
 
+            @if($recentSharedTracks->isNotEmpty())
+                <div class="bg-white shadow rounded p-4 mb-4">
+                    <h3 class="text-lg font-semibold mb-3">💿 Shared with you</h3>
+                    @foreach($recentSharedTracks as $track)
+                        <div class="mb-2 text-xs">
+                            <a href="{{ route('tracks.show', $track) }}"
+                                class="font-semibold text-indigo-600 hover:underline">
+                                {{ $track->title }}
+                            </a>
+                            <span class="text-xs text-gray-500">
+                                by {{ $track->owner->artist_name ?? 'Unknown' }}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
             <div class="bg-white shadow rounded p-4 mb-4">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold mb-3">🗣️ Your Recent Comments</h3>
@@ -231,24 +248,6 @@
                     <p class="text-sm text-gray-500">You haven’t reacted to any tracks yet.</p>
                 @endforelse
             </div>
-
-            @if($recentSharedTracks->isNotEmpty())
-                <div class="bg-white shadow sm:rounded-lg p-4">
-                    <h3 class="text-lg font-semibold mb-3">Shared with you</h3>
-                    @foreach($recentSharedTracks as $track)
-                        <div class="mb-2 text-xs">
-                            <a href="{{ route('tracks.show', $track) }}"
-                                class="text-indigo-600 hover:underline">
-                                {{ $track->title }}
-                            </a>
-                            <span class="text-gray-500">
-                                by {{ $track->owner->artist_name ?? 'Unknown' }}
-                            </span>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
-
         </div>
 
     </div>

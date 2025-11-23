@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Track, TrackPlay, Reaction, Comment};
+use App\Models\{Track, TrackPlay, Reaction, Comment, TrackAccess, User};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage; 
@@ -227,4 +227,39 @@ class TrackController extends Controller
         return view('tracks.trending', compact('tracks', 'search'));
     }
 
+    public function share(Request $request, Track $track)
+    {
+        $this->canManage($track);
+
+        $data = $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'],
+        ]);
+
+        $userToShare = User::where('email', $data['email'])->first();
+
+        if ($userToShare->id === $track->user_id) 
+        {
+            return back()->withErrors([
+                'email' => 'You already have access to this track.',
+            ]);
+        }
+
+        TrackAccess::firstOrCreate([
+            'track_id' => $track->id,
+            'user_id'  => $userToShare->id,
+        ]);
+
+        return back()->with('status', 'Access granted to '.$userToShare->artist_name.' ('.$userToShare->email.').');
+    }
+
+    public function unshare(Track $track, User $user)
+    {
+        $this->canManage($track);
+
+        $track->accesses()
+            ->where('user_id', $user->id)
+            ->delete();
+
+        return back()->with('status', 'Access revoked for '.$user->artist_name.'.');
+    }
 }

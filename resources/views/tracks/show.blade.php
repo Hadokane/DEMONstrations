@@ -26,6 +26,62 @@
 @endphp
 
 <div class="container mx-auto mt-6">
+    @if($track->visibility === 'private')
+        <div class="bg-white shadow rounded p-4 mb-4">
+            <h2 class="text-lg font-semibold mb-2">Share this private track</h2>
+            <p class="text-sm text-gray-600 mb-4">
+                Grant access to other users. <br/>
+                They will be able to see this track in their dashboard and activity views.
+            </p>
+
+            <form method="POST" action="{{ route('tracks.share', $track) }}" class="flex items-center space-x-3 mb-4">
+                @csrf
+                <div>
+                    <x-input-label for="share_email" value="Enter user email:" />
+                    <x-text-input id="share_email"
+                                name="email"
+                                type="email"
+                                class="mt-1 block"
+                                placeholder="user@example.com"
+                                required />
+                    <x-input-error class="mt-2" :messages="$errors->get('email')" />
+                    <x-primary-button class="mt-2">
+                        Add
+                    </x-primary-button>
+                </div>
+            </form>
+
+            <h3 class="text-sm font-semibold mb-2">Currently shared with:</h3>
+            @php
+                $sharedAccesses = $track->accesses()->with('user')->get();
+            @endphp
+
+            @if($sharedAccesses->isEmpty())
+                <p class="text-xs text-gray-500">Not shared with anyone yet.</p>
+            @else
+                <ul class="divide-y divide-gray-200 text-sm">
+                    @foreach($sharedAccesses as $access)
+                        <li class="py-2 flex items-center justify-between">
+                            <div>
+                                <p class="font-medium">{{ $access->user->artist_name }}</p>
+                                <p class="text-xs text-gray-500">{{ $access->user->email }}</p>
+                            </div>
+                            <form method="POST"
+                                action="{{ route('tracks.unshare', [$track, $access->user]) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="text-xs text-red-600 hover:underline"
+                                        onclick="return confirm('Remove access for this user?')">
+                                    Remove
+                                </button>
+                            </form>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
+    @endif
     <div class="bg-white shadow rounded p-4 mb-4">
         <div class="flex">
             @if($track->cover_image_path)

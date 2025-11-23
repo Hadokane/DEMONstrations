@@ -67,6 +67,12 @@ class User extends Authenticatable
         return $this->artist_name ?? $this->getNameAttribute();
     }
 
+    public function sharedTracks()
+    {
+        return $this->belongsToMany(Track::class, 'track_accesses');
+    }
+
+
     /**
      * Get the attributes that should be cast.
      *
