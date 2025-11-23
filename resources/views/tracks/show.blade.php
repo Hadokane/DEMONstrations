@@ -26,7 +26,7 @@
 @endphp
 
 <div class="container mx-auto mt-6">
-    @if($track->visibility === 'private')
+    @if($track->visibility === 'private' && $canManage)
         <div class="bg-white shadow rounded p-4 mb-4">
             <h2 class="text-lg font-semibold mb-2">Share this private track</h2>
             <p class="text-sm text-gray-600 mb-4">
