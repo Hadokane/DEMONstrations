@@ -19,6 +19,13 @@
     </div>
 
     <div>
+        <x-input-label for="cover_image" value="Cover Image (optional)" />
+        <input id="cover_image" name="cover_image" type="file"
+            class="mt-1 block w-full border-gray-300 rounded" accept="image/*">
+        <x-input-error class="mt-2" :messages="$errors->get('cover_image')" />
+    </div>
+
+    <div>
         <x-input-label for="visibility" value="Visibility" />
         <select id="visibility" name="visibility"
             class="mt-1 block w-full border-gray-300 rounded">

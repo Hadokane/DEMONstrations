@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\{Track, TrackPlay, Reaction, Comment};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage; 
 
 class TrackController extends Controller
 {
@@ -155,15 +156,22 @@ class TrackController extends Controller
         $request->validate([
         'title' => ['required','string','max:255'],
         'audio' => ['required','file','mimetypes:audio/mpeg,audio/mp3,audio/wav','max:25600'],
+        'cover_image' => ['nullable', 'image', 'max:2048'],
         'visibility' => ['required','in:public,private'],
         ]);
 
         $path = $request->file('audio')->store('tracks', 'public');
+        
+        $coverPath = null;
+        if ($request->hasFile('cover_image')) {
+            $coverPath = $request->file('cover_image')->store('covers', 'public');
+        }
 
         Track::create([
             'user_id' => auth()->id(),
             'title' => $request->title,
             'audio_file_path' => $path,
+            'cover_image_path' => $coverPath,
             'visibility' => $request->visibility,
             'play_count' => 0,
         ]);
@@ -194,11 +202,26 @@ class TrackController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'visibility' => ['required', 'in:public,private'],
             'audio'=> ['nullable', 'file', 'mimetypes:audio/mpeg,audio/mp3,audio/wav', 'max:25600'],
+            'cover_image' => ['nullable','image','max:2048'],
         ]);
 
         if ($request->hasFile('audio')) {
+            if ($track->audio_file_path) 
+            {
+                Storage::disk('public')->delete($track->audio_file_path);
+            }
             $path = $request->file('audio')->store('tracks', 'public');
             $track->audio_file_path = $path;
+        }
+
+        if ($request->hasFile('cover_image')) 
+        {
+            if ($track->cover_image_path) 
+            {
+                Storage::disk('public')->delete($track->cover_image_path);
+            }
+            $coverPath = $request->file('cover_image')->store('covers', 'public');
+            $track->cover_image_path = $coverPath;
         }
 
         $track->title = $data['title'];

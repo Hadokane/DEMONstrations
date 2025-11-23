@@ -40,6 +40,24 @@
         <x-input-error class="mt-2" :messages="$errors->get('audio')" />
     </div>
 
+    <div>
+        <x-input-label value="Current Cover" />
+
+        @if($track->cover_image_path)
+            <img src="{{ asset('storage/'.$track->cover_image_path) }}"
+                class="w-48 h-48 object-cover rounded mb-2">
+        @else
+            <p class="text-gray-500 text-sm">No cover uploaded.</p>
+        @endif
+    </div>
+
+    <div>
+        <x-input-label for="cover_image" value="Replace Cover Image" />
+        <input id="cover_image" name="cover_image" type="file"
+            class="mt-1 block w-full border-gray-300 rounded" accept="image/*">
+        <x-input-error class="mt-2" :messages="$errors->get('cover_image')" />
+    </div>
+
     <div class="flex justify-between items-center mt-6">
         <x-primary-button>
             Save Changes
