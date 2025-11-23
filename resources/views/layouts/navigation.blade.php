@@ -23,6 +23,24 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+
+            @php
+                $unread = auth()->user()->unreadNotifications()->count();
+            @endphp
+
+            <a href="{{ route('notifications.index') }}"
+               class="relative inline-flex items-center px-3 py-2 text-sm font-medium
+                    {{ $unread > 0 ? 'text-red-600 hover:text-red-800 hover:underline' 
+                        : 'text-gray-600 hover:text-gray-800 hover:underline' }}">
+                    🔔
+                @if($unread > 0)
+                    <span class="text-xs">[{{ $unread }}]</span>
+                @else
+                    <span class="text-xs">[0]</span>
+                @endif
+            </a>
+
+
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">

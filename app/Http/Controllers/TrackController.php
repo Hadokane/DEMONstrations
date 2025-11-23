@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Track, TrackPlay, Reaction, Comment, TrackAccess, User};
+use App\Models\{Track, TrackPlay, Reaction, Comment, TrackAccess, User, Notification};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage; 
@@ -81,10 +81,33 @@ class TrackController extends Controller
     {
         $request->validate(['type' => 'required|in:like,dislike,laugh,wow,sad']);
 
-        Reaction::updateOrCreate(
+        $reaction = Reaction::updateOrCreate(
             ['user_id' => Auth::id(), 'track_id' => $track->id],
             ['type' => $request->type]
         );
+
+            $owner = $track->owner;
+
+        if ($owner && $owner->id !== Auth::id()) 
+        {
+            $reactionsMapping = [
+                'like'    => '👍',
+                'dislike' => '👎',
+                'laugh'   => '😂',
+                'wow'     => '😮',
+                'sad'     => '😢',
+            ];
+
+            $reactionType = $reactionsMapping[$reaction->type] ?? '?';
+
+            Notification::create([
+                'user_id' => $owner->id,
+                'type'    => 'reaction',
+                'title'   => auth()->user()->artist_name." reacted {$reactionType} to your track",
+                'body'    => $track->title,
+                'link'    => route('tracks.show', $track),
+            ]);
+        }
 
         return back();
     }
@@ -93,12 +116,24 @@ class TrackController extends Controller
     {
         $request->validate(['body' => 'required|string|max:500']);
 
-        Comment::create([
+        $comment = Comment::create([
             'user_id' => Auth::id(),
             'track_id' => $track->id,
             'body' => $request->body,
             'timestamp_ms' => $request->input('timestamp_ms'),
         ]);
+
+        $owner = $track->owner;
+
+        if ($owner && $owner->id !== Auth::id()) {
+            Notification::create([
+                'user_id' => $owner->id,
+                'type'    => 'comment',
+                'title'   => auth()->user()->artist_name.' commented on your track',
+                'body'    => '"'.$track->title.'": '.$comment->body,
+                'link'    => route('tracks.show', $track).'#comments',
+            ]);
+        }
 
         return back();
     }

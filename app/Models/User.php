@@ -72,6 +72,15 @@ class User extends Authenticatable
         return $this->belongsToMany(Track::class, 'track_accesses');
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class)->latest();
+    }
+
+    public function unreadNotifications()
+    {
+        return $this->notifications()->whereNull('read_at');
+    }
 
     /**
      * Get the attributes that should be cast.
