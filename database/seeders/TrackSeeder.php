@@ -19,48 +19,88 @@ class TrackSeeder extends Seeder
         $admin = User::where('email','admin@example.com')->firstOrFail();
         $users = User::all();
 
-        // Use demo audio for seeding from public folder
-        $sourceDir = base_path('database/seeders/audio');
-        $files = collect(File::files($sourceDir))
-                    ->filter(fn ($f) => in_array(strtolower($f->getExtension()), ['mp3']))
-                    ->values();
+        $audioDir = storage_path('app/seed/audio');
+        $coverDir = storage_path('app/seed/covers');
 
-        foreach ($files as $i => $file) {
-                    $ext  = strtolower($file->getExtension());
-                    $dest = 'tracks/'.Str::uuid().'.'.$ext;
+        $audioFiles = collect(File::files($audioDir));
+        $coverFiles = collect(File::files($coverDir));
 
-                    Storage::disk('public')->put($dest, File::get($file->getPathname()));
+        if ($audioFiles->isEmpty()) 
+        {
+            return;
+        }
+        
+        $audioCount = $audioFiles->count();
+        $coverCount = $coverFiles->count();
+        $tracksToCreate = 25;
+        $adminTracksToCreate = 6;
 
-                    Track::create([
-                        'user_id'         => $admin->id,
-                        'title'           => $file->getFilenameWithoutExtension(),
-                        'audio_file_path' => $dest,   
-                        'visibility'      => $i === 0 ? 'private' : 'public',
-                        'play_count'      => 0,
-                    ]);
-                }
+        for ($i = 0; $i < $tracksToCreate; $i++) 
+        {
+            $audioFile = $audioFiles[$i % $audioCount];
+            $audioExtension = strtolower($audioFile->getExtension());
+            $audioPath = 'tracks/' . Str::uuid() . '.' . $audioExtension;
 
+            Storage::disk('public')->put(
+                $audioPath,
+                File::get($audioFile->getRealPath())
+            );
 
-        // Public track (everyone can see)
-        Track::factory()->create([
-            'user_id'    => $admin->id,
-            'title'      => 'Public Demo Track',
-            'visibility' => 'public',
-        ]);
+            $coverPath = null;
+            if ($coverCount > 0 && rand(1, 100) <= 70) 
+            {
+                $coverFile = $coverFiles[$i % $coverCount];
+                $coverExt  = strtolower($coverFile->getExtension());
+                $coverPath = 'covers/' . Str::uuid() . '.' . $coverExt;
 
-        // Private track (owner-only)
-        Track::factory()->create([
-            'user_id'    => $admin->id,
-            'title'      => 'Private Demo Track',
-            'visibility' => 'private',
-        ]);
+                Storage::disk('public')->put(
+                    $coverPath,
+                    File::get($coverFile->getRealPath())
+                );
+            }
 
-        // 3 Additional tracks
-        for ($i = 0; $i < 5; $i++) {
-            $user = $users->random();
-            Track::factory()->create([
-                'user_id' => $user->id,
+            Track::create([
+                'user_id'          => $users->random()->id,
+                'title'            => Str::title(Str::random(10)),
+                'audio_file_path'  => $audioPath,
+                'cover_image_path' => $coverPath,
+                'visibility'       => rand(0, 1) ? 'public' : 'private',
+                'play_count'       => rand(0, 3000),
+            ]);
+        }
+
+        for ($i = 0; $i < $adminTracksToCreate; $i++) 
+        {
+
+            $audioFile = $audioFiles[$i % $audioCount];
+            $audioExt  = strtolower($audioFile->getExtension());
+            $audioPath = 'tracks/' . Str::uuid() . '.' . $audioExt;
+
+            Storage::disk('public')->put(
+                $audioPath,
+                File::get($audioFile->getRealPath())
+            );
+
+            $coverPath = null;
+            if ($coverCount > 0 && rand(1, 100) <= 70) 
+            {
+                $coverFile = $coverFiles[$i % $coverCount];
+                $coverExt  = strtolower($coverFile->getExtension());
+                $coverPath = 'covers/' . Str::uuid() . '.' . $coverExt;
+                Storage::disk('public')->put(
+                    $coverPath,
+                    File::get($coverFile->getRealPath())
+                );
+            }
+
+            Track::create([
+                'user_id'          => $admin->id,
+                'title'            => Str::title(Str::random(10)),
+                'audio_file_path'  => $audioPath,
+                'cover_image_path' => $coverPath,
+                'visibility'       => rand(0, 1) ? 'public' : 'private',
+                'play_count'       => rand(0, 3000),
             ]);
         }
     }
-}
+}   
