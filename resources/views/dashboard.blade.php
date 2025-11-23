@@ -33,15 +33,7 @@
 
                 <div class="bg-white shadow rounded p-4 mb-4 flex">
                     <a href="{{ route('tracks.show', $track) }}">
-                        @if($track->cover_image_path)
-                                <img src="{{ asset('storage/'.$track->cover_image_path) }}"
-                                class="mr-4 w-48 h-48 object-cover rounded mr-4"
-                                alt="Cover image for {{ $track->title }}">
-                        @else
-                            <div class="mr-4 w-48 h-48 bg-gray-200 flex items-center justify-center rounded text-gray-500">
-                                No Cover
-                            </div>
-                            @endif
+                        <x-cover-image :track="$track" size="lg" />
                     </a>
 
                     <div class="flex-1">
@@ -129,14 +121,7 @@
                             <li class="py-2 flex items-center justify-between">
                                 <div class="flex items-center space-x-3">
                                     <a href="{{ route('tracks.show', $t) }}">
-                                    @if($t->cover_image_path)
-                                        <img src="{{ asset('storage/'.$t->cover_image_path) }}"
-                                            class="w-10 h-10 rounded object-cover" alt="Cover image for {{ $t->title }}">
-                                    @else
-                                        <div class="w-10 h-10 bg-gray-200 flex items-center justify-center rounded text-gray-500 text-xs">
-                                            No Cover
-                                        </div>
-                                    @endif
+                                        <x-cover-image :track="$t" size="sm" />
                                     </a>
 
                                     <div>

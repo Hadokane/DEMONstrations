@@ -77,15 +77,9 @@
     @endif
     <div class="bg-white shadow rounded p-4 mb-4">
         <div class="flex">
-            @if($track->cover_image_path)
-                <img src="{{ asset('storage/'.$track->cover_image_path) }}"
-                    class="mr-4 w-48 h-48 object-cover rounded mr-4"
-                    alt="Cover image for {{ $track->title }}">
-            @else
-                <div class="mr-4 w-48 h-48 bg-gray-200 flex items-center justify-center rounded text-gray-500">
-                    No Cover
-                </div>
-            @endif
+            <a href="{{ route('tracks.show', $track) }}">
+                <x-cover-image :track="$track" size="lg" />
+            </a>
             <div class="flex-1">
                 <h1 class="text-2xl font-bold mb-2">{{ $track->title }}</h1>
                     

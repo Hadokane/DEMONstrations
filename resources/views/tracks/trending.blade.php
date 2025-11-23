@@ -47,14 +47,7 @@
                     <tr>
                         <td class="px-4 py-2 text-sm">
                             <a href="{{ route('tracks.show', $track) }}">
-                            @if($track->cover_image_path)
-                                <img src="{{ asset('storage/'.$track->cover_image_path) }}"
-                                    class="w-10 h-10 rounded object-cover" alt="Cover image for {{ $track->title }}">
-                            @else
-                                <div class="w-10 h-10 bg-gray-200 flex items-center justify-center rounded text-gray-500 text-xs">
-                                    No Cover
-                                </div>
-                            @endif
+                                <x-cover-image :track="$track" size="sm" />
                             </a>
                         </td>
                         <td class="px-4 py-2 text-sm">

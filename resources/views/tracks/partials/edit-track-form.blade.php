@@ -42,13 +42,9 @@
 
     <div>
         <x-input-label value="Current Cover" />
-
-        @if($track->cover_image_path)
-            <img src="{{ asset('storage/'.$track->cover_image_path) }}"
-                class="w-48 h-48 object-cover rounded mb-2">
-        @else
-            <p class="text-gray-500 text-sm">No cover uploaded.</p>
-        @endif
+        <a href="{{ route('tracks.show', $track) }}">
+            <x-cover-image :track="$track" size="lg" />
+        </a>
     </div>
 
     <div>
