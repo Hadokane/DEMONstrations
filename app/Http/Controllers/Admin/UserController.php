@@ -14,13 +14,41 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::withCount(['tracks', 'comments'])
-            ->orderBy('artist_name')
-            ->get();
+        $search = $request->query('search');
+        $sort   = $request->query('sort', 'artist');
 
-        return view('admin.users.index', compact('users'));
+        $query = User::query()
+            ->withCount(['tracks', 'comments']);
+
+        if ($search) 
+        {
+            $query->where(function ($q) use ($search) 
+            {
+                $q->where('artist_name', 'like', "%{$search}%")
+                ->orWhere('first_name', 'like', "%{$search}%")
+                ->orWhere('last_name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        switch ($sort) 
+        {
+            case 'tracks':
+                $query->orderByDesc('tracks_count');
+                break;
+            case 'comments':
+                $query->orderByDesc('comments_count');
+                break;
+            default:
+                $query->orderBy('artist_name');
+                break;
+        }
+
+        $users = $query->paginate(10)->withQueryString();
+
+        return view('admin.users.index', compact('users', 'search', 'sort'));
     }
 
     /**

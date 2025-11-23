@@ -13,7 +13,7 @@
     </div>
 
     <div class="max-w-5xl mx-auto py-8 sm:px-6 lg:px-8 space-y-6">
-        <div class="bg-white shadow sm:rounded-lg p-6">
+        <div id="user" class="bg-white shadow sm:rounded-lg p-6">
             <h1 class="text-2xl font-bold mb-2">{{ $user->artist_name }}</h1>
             <p class="text-gray-600 mb-1">Real Name: {{ $user->name }}</p>
             <p class="text-gray-600 mb-1">Email: {{ $user->email }}</p>
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <div class="bg-white shadow sm:rounded-lg p-6">
+        <div id="tracks" class="bg-white shadow sm:rounded-lg p-6">
             <h2 class="text-xl font-semibold mb-3">Tracks ({{ $user->tracks->count() }})</h2>
             @forelse($user->tracks as $track)
                 <div class="border-b py-2">
@@ -81,7 +81,7 @@
             @endforelse
         </div>
 
-        <div class="bg-white shadow sm:rounded-lg p-6">
+        <div id="comments" class="bg-white shadow sm:rounded-lg p-6">
             <h2 class="text-xl font-semibold mb-3">Comments ({{ $user->comments->count() }})</h2>
             @forelse ($user->comments as $comment)
                 <div class="border-b py-2 text-sm">
