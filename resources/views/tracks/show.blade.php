@@ -50,10 +50,14 @@
                     <p class="text-gray-700 mt-2 mb-2">Plays: {{ $plays }}</p>
 
                     @if($canManage)
+                    <div class="flex space-x-2">
                         <a href="{{ route('tracks.edit', $track) }}"
                         class="inline-flex items-center px-3 py-2 text-sm rounded bg-indigo-600 text-white hover:bg-indigo-700">
                             Edit Track
                         </a>
+
+                        @include('tracks.partials.delete-track-form', ['track' => $track])
+                    </div>
                     @endif
             </div>
         </div>
@@ -118,6 +122,22 @@
                 @endif
 
                 <p class="text-xs">Left At: {{ $comment->created_at }}</p>
+                
+                @if(auth()->id() === $comment->user_id || auth()->user()->is_admin)
+                    <form method="POST"
+                        action="{{ route('comments.destroy', $comment) }}"
+                        class="inline"
+                        onsubmit="return confirm('Delete this comment?');">
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit"
+                            class="text-red-600 hover:underline text-sm">
+                            Delete
+                        </button>
+                    </form>
+                @endif
+                
             </div>
         @endforeach
     </div>

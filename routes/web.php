@@ -3,6 +3,7 @@
 use App\Http\Controllers\TrackController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\TrackController as AdminTrackController;
@@ -28,7 +29,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/tracks/{track}/reaction', [TrackController::class, 'addReaction'])->name('tracks.react');
     Route::post('/tracks/{track}/comment', [TrackController::class, 'addComment'])->name('tracks.comment');
     
-//Profile Routes
+    //Comment Routes
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    //Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

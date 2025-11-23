@@ -31,6 +31,24 @@
                     <td class="py-2 pr-4">
                         {{ $comment->created_at->diffForHumans() }}
                     </td>
+
+                    @if(auth()->id() === $comment->user_id || auth()->user()->is_admin)
+                        <td class="px-3 py-2 text-right">
+                            <form method="POST"
+                                action="{{ route('comments.destroy', $comment) }}"
+                                class="inline"
+                                onsubmit="return confirm('Delete this comment?');">
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit"
+                                    class="text-red-600 hover:underline text-sm">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    @endif
+
                 </tr>
             @endforeach
             </tbody>

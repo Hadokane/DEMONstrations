@@ -43,10 +43,10 @@
                     @if($tab === 'tracks')
                         <select name="filter"
                                 class="border-gray-300 rounded text-sm">
-                            <option value="all" {{ $filter === 'all' ? 'selected' : '' }}>All accessible</option>
+                            <option value="all" {{ $filter === 'all' ? 'selected' : '' }}>All</option>
                             <option value="mine" {{ $filter === 'mine' ? 'selected' : '' }}>My uploads</option>
                             <option value="shared" {{ $filter === 'shared' ? 'selected' : '' }}>Shared with me</option>
-                            <option value="public" {{ $filter === 'public' ? 'selected' : '' }}>Public only</option>
+                            <option value="public" {{ $filter === 'public' ? 'selected' : '' }}>My public tracks</option>
                             <option value="private" {{ $filter === 'private' ? 'selected' : '' }}>My private tracks</option>
                         </select>
 
