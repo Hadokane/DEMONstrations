@@ -1,9 +1,9 @@
 @if($tracks->isEmpty())
-    <p class="text-sm text-gray-500">You haven’t uploaded any tracks yet.</p>
+    <p class="text-sm text-gray-500">No tracks have been shared with you yet.</p>
 @else
     <div class="overflow-x-auto">
         <table class="min-w-full text-sm">
-            <thead>
+            <thead class="bg-gray-50 text-gray-500 uppercase tracking-wide">
             <tr class="border-b text-left text-gray-500">
                 <th class="py-2 pr-4">Title</th>
                 <th class="py-2 pr-4">Artist</th>
@@ -28,6 +28,6 @@
     </div>
 
     <div class="mt-4">
-        {{ $tracks->appends(['tab' => 'tracks', 'search' => request('search')])->links() }}
+        {{ $tracks->appends(['tab' => 'shared', 'search' => request('search')])->links() }}
     </div>
 @endif

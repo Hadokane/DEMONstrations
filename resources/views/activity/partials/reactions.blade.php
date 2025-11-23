@@ -13,7 +13,7 @@
 
     <div class="overflow-x-auto">
         <table class="min-w-full text-sm">
-            <thead>
+            <thead class="bg-gray-50 text-gray-500 uppercase tracking-wide">
             <tr class="border-b text-left text-gray-500">
                 <th class="py-2 pr-4">Track</th>
                 <th class="py-2 pr-4">Reaction</th>

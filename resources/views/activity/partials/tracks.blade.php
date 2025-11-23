@@ -3,7 +3,7 @@
 @else
     <div class="overflow-x-auto">
         <table class="min-w-full text-sm">
-            <thead>
+            <thead class="bg-gray-50 text-gray-500 uppercase tracking-wide">
             <tr class="border-b text-left text-gray-500">
                 <th class="py-2 pr-4">Title</th>
                 <th class="py-2 pr-4">Visibility</th>
@@ -11,7 +11,7 @@
                 <th class="py-2 pr-4">Reactions</th>
                 <th class="py-2 pr-4">Comments</th>
                 <th class="py-2 pr-4">Created</th>
-                <th class="py-2"></th>
+                <th class="py-2 pr-4"></th>
             </tr>
             </thead>
             <tbody>

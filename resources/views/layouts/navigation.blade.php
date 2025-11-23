@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-indigo-100 border-indigo-300 border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -32,10 +32,11 @@
                class="relative inline-flex items-center px-3 py-2 text-sm font-medium
                     {{ $unread > 0 ? 'text-red-600 hover:text-red-800 hover:underline' 
                         : 'text-gray-600 hover:text-gray-800 hover:underline' }}">
-                    🔔
                 @if($unread > 0)
+                    🚨
                     <span class="text-xs">[{{ $unread }}]</span>
                 @else
+                    🔔
                     <span class="text-xs">[0]</span>
                 @endif
             </a>

@@ -141,7 +141,13 @@
 
             @if($recentSharedTracks->isNotEmpty())
                 <div class="bg-white shadow rounded p-4 mb-4">
-                    <h3 class="text-lg font-semibold mb-3">💿 Shared with you</h3>
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold mb-3">💿 Shared with you</h3>
+                        <a href="{{ route('activity.index', ['tab' => 'shared']) }}"
+                            class="text-xs text-indigo-600 hover:underline">
+                            View all
+                        </a>
+                    </div>  
                     @foreach($recentSharedTracks as $track)
                         <div class="mb-2 text-xs">
                             <a href="{{ route('tracks.show', $track) }}"
