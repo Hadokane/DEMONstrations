@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Your Activity
+            Activity Manager
         </h2>
     </x-slot>
 
@@ -11,9 +11,10 @@
 
                 @php
                     $tabs = [
-                        'tracks'    => 'Your Uploads',
+                        'tracks'    => 'Your Tracks',
                         'comments'  => 'Your Comments',
                         'reactions' => 'Your Reactions',
+                        'shared'    => 'Shared With You',
                     ];
                 @endphp
 
@@ -45,7 +46,6 @@
                                 class="border-gray-300 rounded text-sm">
                             <option value="all" {{ $filter === 'all' ? 'selected' : '' }}>All</option>
                             <option value="mine" {{ $filter === 'mine' ? 'selected' : '' }}>My uploads</option>
-                            <option value="shared" {{ $filter === 'shared' ? 'selected' : '' }}>Shared with me</option>
                             <option value="public" {{ $filter === 'public' ? 'selected' : '' }}>My public tracks</option>
                             <option value="private" {{ $filter === 'private' ? 'selected' : '' }}>My private tracks</option>
                         </select>
@@ -69,11 +69,12 @@
                     @endif
                 </form>
 
-
                 @if ($tab === 'tracks')
                     @include('activity.partials.tracks', ['tracks' => $items])
                 @elseif ($tab === 'comments')
                     @include('activity.partials.comments', ['comments' => $items])
+                @elseif ($tab === 'shared')
+                    @include('activity.partials.shared', ['tracks' => $items])
                 @else
                     @include('activity.partials.reactions', ['reactions' => $items])
                 @endif

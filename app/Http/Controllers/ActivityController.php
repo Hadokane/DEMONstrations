@@ -46,12 +46,26 @@ class ActivityController extends Controller
 
             $items = $query->paginate($perPage)->withQueryString();
         } 
+        elseif ($tab === 'shared') 
+        {
+            $query = $user->sharedTracks()->with(['owner'])->latest('tracks.created_at');
+
+            if ($search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhereHas('owner', fn($q) =>
+                        $q->where('artist_name', 'like', "%{$search}%")
+                    );
+            }
+
+            $items = $query->paginate($perPage)->withQueryString();
+        }
         else 
         {
             $tab = 'tracks';
 
-            $query = $user->tracks()->withCount(['plays', 'reactions', 'comments'])->latest();
-
+            $query = $user->tracks()
+                        ->withCount(['plays', 'reactions', 'comments'])
+                        ->latest();
 
             if ($filter === 'mine') 
             {
@@ -65,11 +79,6 @@ class ActivityController extends Controller
             {
                 $query->where('visibility', 'private')
                     ->where('user_id', $user->id);
-            } 
-            elseif ($filter === 'shared') 
-            {
-                $query->where('visibility', 'private')
-                    ->whereHas('accesses', fn ($q) => $q->where('user_id', $user->id));
             } 
             else 
             {
