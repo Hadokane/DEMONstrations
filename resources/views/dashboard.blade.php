@@ -51,12 +51,7 @@
                             </a>
                         </h2>
 
-                        @if($track->visibility === 'private')
-                            <span class="text-xs inline-flex items-center px-2 py-0.5 rounded bg-gray-800 text-white">Private</span>
-                        @else
-                            <span class="text-xs inline-flex items-center px-2 py-0.5 rounded bg-emerald-600 text-white">Public</span>
-                        @endif  
-                        
+                        <x-track-visibility-badge :track="$track" />
                         <p class="text-gray-600">Artist: {{ $track->owner->artist_name }}</p>
 
                         @php 

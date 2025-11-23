@@ -89,15 +89,9 @@
             <div class="flex-1">
                 <h1 class="text-2xl font-bold mb-2">{{ $track->title }}</h1>
                     
-                    @if($track->visibility === 'private')
-                    <span class="text-xs inline-flex items-center px-2 py-0.5 rounded bg-gray-800 text-white">Private</span>
-                    @else
-                    <span class="text-xs inline-flex items-center px-2 py-0.5 rounded bg-emerald-600 text-white">Public</span>
-                    @endif
-
+                    <x-track-visibility-badge :track="$track" />
                     <p class="text-gray-700 mt-2 mb-2">Artist: {{ $track->owner->artist_name }}</p>
                     <p class="text-gray-700 mt-2 mb-2">Plays: {{ $stats->plays }}</p>
-
                     @if($canManage)
                     <div class="flex space-x-2">
                         <a href="{{ route('tracks.edit', $track) }}"
