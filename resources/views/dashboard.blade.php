@@ -60,29 +60,24 @@
                         <p class="text-gray-600">Artist: {{ $track->owner->artist_name }}</p>
 
                         @php 
-                            $plays = $track->plays->count();
-                            $likes = $track->likesCount();
-                            $dislikes = $track->dislikesCount();
-                            $laughs = $track->laughsCount();
-                            $wows = $track->wowCount();
-                            $sads = $track->sadCount();
-                            $totalVotes = $likes + $dislikes;
-                            $approval   = $totalVotes > 0 ? round(($likes / $totalVotes) * 100) : null;
-                            $comments = $track->comments->count()
+                            $stats = $track->stats; 
                         @endphp
 
                         <p class="mt-2">
-                            ▶️ Plays: {{ $plays }} | 
-                            👍 Likes: {{ $likes }} | 
-                            👎 Dislikes: {{ $dislikes }} | 
-                            😄 Laughs: {{ $laughs }} | 
-                            🤩 Wows: {{ $wows }} | 
-                            🥹 Sads: {{ $sads }} | 
-                            💬 Comments: {{ $comments }}
+                            ▶️ Plays: {{ $stats->plays }}
+                            <br />
+                            👍 {{ $stats->likes }}
+                            | 👎 {{ $stats->dislikes }}
+                            | 😂 {{ $stats->laughs }}
+                            | 😮 {{ $stats->wows }}
+                            | 😢 {{ $stats->sads }}
+                            | 💬 {{ $stats->comments }}
                         </p>
 
-                        @if(!is_null($approval))
-                            <p class="text-sm text-gray-500">Approval Rating: {{ $approval }}%</p>
+                        @if(!is_null($stats->approval))
+                            <p class="text-sm text-gray-500">
+                                Approval Rating: {{ $stats->approval }}%
+                            </p>
                         @endif
 
                         <p class="text-sm text-gray-500">Unique Listeners: {{ $track->plays->unique('user_id')->count() }}</p>

@@ -7,14 +7,7 @@
 
     $canPlayTrack = request()->query('play') == 1;
 
-    $plays = $track->plays->count();
-    $likes = $track->likesCount();
-    $dislikes = $track->dislikesCount();
-    $laughs = $track->laughsCount();
-    $wows = $track->wowCount();
-    $sads = $track->sadCount();
-    $totalVotes = $likes + $dislikes;
-    $approval   = $totalVotes > 0 ? round(($likes / $totalVotes) * 100) : null;
+    $stats = $track->stats; 
 
     $orderedComments = $track->comments()->latest()->with('user')->get();
     $commentsCount   = $orderedComments->count();
@@ -103,7 +96,7 @@
                     @endif
 
                     <p class="text-gray-700 mt-2 mb-2">Artist: {{ $track->owner->artist_name }}</p>
-                    <p class="text-gray-700 mt-2 mb-2">Plays: {{ $plays }}</p>
+                    <p class="text-gray-700 mt-2 mb-2">Plays: {{ $stats->plays }}</p>
 
                     @if($canManage)
                     <div class="flex space-x-2">
@@ -143,11 +136,11 @@
             <h3 class="font-semibold">React:</h3>
             <form method="POST" action="{{ route('tracks.react', $track) }}">
                 @csrf
-                <button name="type" value="like" class="{{ $btn($userReaction === 'like') }}">👍 {{ $likes }}</button>
-                <button name="type" value="dislike" class="{{ $btn($userReaction === 'dislike') }}">👎 {{ $dislikes }}</button>
-                <button name="type" value="laugh" class="{{ $btn($userReaction === 'laugh') }}">😂 {{ $laughs }}</button>
-                <button name="type" value="wow" class="{{ $btn($userReaction === 'wow') }}">😮 {{ $wows }}</button>
-                <button name="type" value="sad" class="{{ $btn($userReaction === 'sad') }}">😢 {{ $sads }}</button>
+                <button name="type" value="like" class="{{ $btn($userReaction === 'like') }}">👍 {{ $stats->likes }}</button>
+                <button name="type" value="dislike" class="{{ $btn($userReaction === 'dislike') }}">👎 {{ $stats->dislikes }}</button>
+                <button name="type" value="laugh" class="{{ $btn($userReaction === 'laugh') }}">😂 {{ $stats->laughs }}</button>
+                <button name="type" value="wow" class="{{ $btn($userReaction === 'wow') }}">😮 {{ $stats->wows }}</button>
+                <button name="type" value="sad" class="{{ $btn($userReaction === 'sad') }}">😢 {{ $stats->sads }}</button>
             </form>
             
             @if($userReaction)
@@ -163,8 +156,8 @@
                 </form>
             @endif
 
-            @if(!is_null($approval))
-            <p class="text-sm text-gray-500">Approval Rating: {{ $approval }}%</p>
+            @if(!is_null($stats->approval))
+            <p class="text-sm text-gray-500">Approval Rating: {{ $stats->approval }}%</p>
             @endif
         </div>
         <div class="bg-gray-100 h-0.5 mt-2 mb-2"></div>

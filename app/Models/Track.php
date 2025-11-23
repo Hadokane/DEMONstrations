@@ -46,29 +46,31 @@ class Track extends Model
         return $this->hasMany(TrackAccess::class); 
     }
 
-    public function likesCount(): int 
-    { 
-        return $this->reactions()->where('type','like')->count(); 
-    }
+    public function getStatsAttribute()
+    {
+        $plays     = $this->plays->count();
+        $likes     = $this->reactions->where('type', 'like')->count();
+        $dislikes  = $this->reactions->where('type', 'dislike')->count();
+        $laughs    = $this->reactions->where('type', 'laugh')->count();
+        $wows      = $this->reactions->where('type', 'wow')->count();
+        $sads      = $this->reactions->where('type', 'sad')->count();
 
-    public function dislikesCount(): int 
-    { 
-        return $this->reactions()->where('type','dislike')->count(); 
-    }
+        $totalVotes = $likes + $dislikes;
+        $approval   = $totalVotes > 0
+            ? round(($likes / $totalVotes) * 100)
+            : null;
 
-    public function laughsCount(): int 
-    { 
-        return $this->reactions()->where('type','laugh')->count(); 
-    }
-
-    public function wowCount(): int 
-    { 
-        return $this->reactions()->where('type','wow')->count(); 
-    }
-
-    public function sadCount(): int 
-    { 
-        return $this->reactions()->where('type','sad')->count(); 
+        return (object)[
+            'plays'     => $plays,
+            'likes'     => $likes,
+            'dislikes'  => $dislikes,
+            'laughs'    => $laughs,
+            'wows'      => $wows,
+            'sads'      => $sads,
+            'approval'  => $approval,
+            'comments'  => $this->comments->count(),
+            'totalVotes'=> $totalVotes,
+        ];
     }
 
 }
