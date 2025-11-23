@@ -306,6 +306,15 @@ class TrackController extends Controller
             'user_id'  => $userToShare->id,
         ]);
 
+        $actor = Auth::user();
+        Notification::create([
+            'user_id' => $userToShare->id,
+            'type'    => 'track_share',
+            'title'   => "{$actor->artist_name} shared a private track with you",
+            'body'    => $track->title,
+            'link'    => route('tracks.show', $track),
+        ]);
+
         return back()->with('status', 'Access granted to '.$userToShare->artist_name.' ('.$userToShare->email.').');
     }
 
@@ -317,6 +326,16 @@ class TrackController extends Controller
             ->where('user_id', $user->id)
             ->delete();
 
+        $actor = Auth::user();
+        if ($actor->id !== $user->id) {
+            Notification::create([
+                'user_id' => $user->id,
+                'type'    => 'track_unshare',
+                'title'   => "{$actor->artist_name} removed your access to a private track",
+                'body'    => $track->title,
+                'link'    => null, // no guarantee they can still see it
+            ]);
+        }
         return back()->with('status', 'Access revoked for '.$user->artist_name.'.');
     }
 
