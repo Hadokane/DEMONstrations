@@ -13,69 +13,25 @@ class TrackController extends Controller
     {
         $user = Auth::user();
         
-        $filter = $request->query('filter', 'all');
-        $search = $request->query('search');
-        $sort   = $request->query('sort', 'newest');
+        $recentTracks = $user->tracks()
+            ->withCount(['plays', 'reactions', 'comments'])
+            ->latest()
+            ->limit(4)
+            ->get();
 
-        $query = Track::query()->with(['reactions', 'plays', 'comments']);
-        
-        if ($filter === 'mine') 
-        {
-            $query->where('user_id', $user->id);
-        }
-        elseif ($filter === 'public') {
-            $query->where('visibility', 'public');
-        }
-        elseif ($filter === 'private') 
-        {
-            $query->where('visibility', 'private')
-                  ->where('user_id', $user->id);
-        }
-        elseif ($filter === 'shared') 
-        {
-            $query->where('visibility', 'private')
-                  ->whereHas('accesses', fn($q) => $q->where('user_id', $user->id));
-        }
-        else 
-        {
-            $query->where('visibility', 'public')
-                ->orWhere('user_id', $user->id)
-                ->orWhereHas('accesses', fn($q) => $q->where('user_id', $user->id));
-        }
+        $recentSharedTracks = Track::query()
+            ->where('visibility', 'private')
+            ->whereHas('accesses', fn ($q) => $q->where('user_id', $user->id))
+            ->with('owner')
+            ->latest()
+            ->limit(5)
+            ->get();
 
-        if ($search) 
-        {
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                ->orWhereHas('owner', fn ($q2) =>
-                    $q2->where('artist_name', 'like', "%{$search}%")
-                );
-            }); 
-        }
-
-        if ($sort === 'popularity') 
-        {
-            $query->orderByDesc('play_count');
-        } 
-        elseif ($sort === 'newest') 
-        {
-            $query->latest();
-        }
-        elseif ($sort === 'oldest') 
-        {
-            $query->oldest();
-        }
-        elseif ($sort === 'reactions') 
-        {
-            $query->withCount('reactions')->orderByDesc('reactions_count');
-        }
-        else 
-        {
-            $query->latest();
-        }
-        
-        $tracks = $query->paginate(5)->withQueryString();
-        
+        // $recentTrendingTracks = Track::query()
+        //     ->where('reactions' > 2)
+        //     ->limit(5)
+        //     ->get();
+            
         $recentComments = $user->comments()
             ->with('track')
             ->latest()
@@ -88,7 +44,7 @@ class TrackController extends Controller
             ->limit(5)
             ->get();
 
-        return view('dashboard', compact('tracks', 'user', 'filter', 'search', 'sort', 'recentComments', 'recentReactions'));
+        return view('dashboard', compact( 'user', 'recentTracks', 'recentSharedTracks', 'recentComments', 'recentReactions'));
     }
 
     public function show(Track $track)

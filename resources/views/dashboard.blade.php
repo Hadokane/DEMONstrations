@@ -17,56 +17,16 @@
 
         <div class="mt-4 mb-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div id="tracks-list">
-                <form method="GET" action="{{ route('dashboard') }}" class="mb-4 flex items-center space-x-2">
-                    <input
-                        type="text"
-                        name="search"
-                        value="{{ $search ?? '' }}"
-                        placeholder="Search tracks/artists..."
-                        class="border rounded px-3 py-1 text-sm w-64"
-                    >
+                <div class="bg-white shadow rounded p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold">🎵 Your Recent Tracks</h3>
+                        <a href="{{ route('activity.index', ['tab' => 'tracks']) }}"
+                            class="text-xs text-indigo-600 hover:underline">
+                            View all
+                        </a>
+                    </div>
 
-                    <select name="sort" class="border rounded px-2 py-1 text-sm">
-                        <option value="popularity" {{ ($sort ?? '') === 'popularity' ? 'selected' : '' }}>Most Plays</option>
-                        <option value="reactions" {{ ($sort ?? '') === 'reactions' ? 'selected' : '' }}>Most Reactions</option>
-                        <option value="newest"  {{ ($sort ?? '') === 'newest' ? 'selected' : '' }}>Newest</option>
-                        <option value="oldest"  {{ ($sort ?? '') === 'oldest' ? 'selected' : '' }}>Oldest</option>
-                    </select>
-
-                    <input type="hidden" name="filter" value="{{ $filter }}">
-                    <x-primary-button class="text-sm">
-                        Apply
-                    </x-primary-button>
-                </form>
-               
-                <div class="mb-4 flex space-x-2">
-                    <a href="{{ route('dashboard', ['filter' => 'all']) }}#tracks-list"
-                    class="px-3 py-1 rounded text-sm {{ $filter === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700' }}">
-                        All
-                    </a>
-                    <a href="{{ route('dashboard', ['filter' => 'mine']) }}#tracks-list"
-                    class="px-3 py-1 rounded text-sm {{ $filter === 'mine' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700' }}">
-                        My Tracks
-                    </a>
-                    <a href="{{ route('dashboard', ['filter' => 'shared']) }}#tracks-list"
-                    class="px-3 py-1 rounded text-sm {{ $filter === 'shared' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700' }}">
-                        Shared with Me
-                    </a>
-                    <a href="{{ route('dashboard', ['filter' => 'public']) }}#tracks-list"
-                    class="px-3 py-1 rounded text-sm {{ $filter === 'public' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700' }}">
-                        Public Tracks
-                    </a>
-                    <a href="{{ route('dashboard', ['filter' => 'private']) }}#tracks-list"
-                    class="px-3 py-1 rounded text-sm {{ $filter === 'private' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700' }}">
-                        Private Tracks
-                    </a>
-                </div>
-
-                <div class="mt-4 mb-4">
-                    {{ $tracks->links() }}
-                </div>
-
-                @foreach($tracks as $track)
+                @foreach($recentTracks as $track)
                     @php
                         $canManage = auth()->id() === $track->user_id || auth()->user()->is_admin;
                     @endphp
@@ -148,7 +108,7 @@
                 </div>
                 @endforeach
 
-                @if($tracks->isEmpty())
+                @if($recentTracks->isEmpty())
                     <div class="border-t border-gray-300 mt-4">
                         <h2><strong>No tracks found.</strong></h2>
                         <img src="{{ asset('img/empty-demon.png') }}" 
@@ -159,58 +119,88 @@
                     </div>
                 @endif
             </div>
-            <div>
-                <div class="bg-white shadow rounded p-4 mb-4">
+        </div>
+        <div>
+            <div class="bg-white shadow rounded p-4 mb-4">
+                <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold mb-3">🗣️ Your Recent Comments</h3>
-                    @forelse ($recentComments as $comment)
-                        <div class="border-b py-2 text-sm">
-                            <div class="flex justify-between">
-                                <a href="{{ route('tracks.show', $comment->track) }}" class="font-semibold text-indigo-600 hover:underline">
-                                    {{ $comment->track->title }}
-                                </a>
-                                <span class="text-xs text-gray-500">
-                                    {{ $comment->created_at->diffForHumans() }}
-                                </span>
-                            </div>
-                            <p>{{ $comment->body }}</p>
-                        </div>
-                    @empty
-                        <p class="text-sm text-gray-500">You haven’t left any comments yet.</p>
-                    @endforelse
+                    <a href="{{ route('activity.index', ['tab' => 'comments']) }}"
+                    class="text-xs text-indigo-600 hover:underline">
+                        View all
+                    </a>
                 </div>
-                <div class="bg-white shadow rounded p-4 mb-4">
-                    <h3 class="text-lg font-semibold mb-3">🎭 Your Recent Reactions</h3>
-    
-                    @forelse ($recentReactions as $reaction)
-                        <div class="border-b py-2 text-sm flex justify-between items-center">
-                            <div>
-                                <a href="{{ route('tracks.show', $reaction->track) }}" class="font-semibold text-indigo-600 hover:underline">
-                                    {{ $reaction->track->title }}
-                                </a>
-                                <p class="text-xs text-gray-500">
-                                    {{ $reaction->created_at->diffForHumans() }}
-                                </p>
-                            </div>
-                            <div>
-                                @php
-                                    $icons = [
-                                        'like'    => '👍',
-                                        'dislike' => '👎',
-                                        'laugh'   => '😂',
-                                        'wow'     => '😮',
-                                        'sad'     => '😢',
-                                    ];
-                                @endphp
-                                <span class="text-xl">
-                                    {{ $icons[$reaction->type] ?? '❓' }}
-                                </span>
-                            </div>
+                @forelse ($recentComments as $comment)
+                    <div class="border-b py-2 text-sm">
+                        <div class="flex justify-between">
+                            <a href="{{ route('tracks.show', $comment->track) }}" class="font-semibold text-indigo-600 hover:underline">
+                                {{ $comment->track->title }}
+                            </a>
+                            <span class="text-xs text-gray-500">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </span>
                         </div>
-                    @empty
-                        <p class="text-sm text-gray-500">You haven’t reacted to any tracks yet.</p>
-                    @endforelse
-                </div>
+                        <p>{{ $comment->body }}</p>
+                    </div>
+                @empty
+                    <p class="text-sm text-gray-500">You haven’t left any comments yet.</p>
+                @endforelse
             </div>
+            <div class="bg-white shadow rounded p-4 mb-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold mb-3">🎭 Your Recent Reactions</h3>
+                    <a href="{{ route('activity.index', ['tab' => 'reactions']) }}"
+                    class="text-xs text-indigo-600 hover:underline">
+                        View all
+                    </a>
+                </div>
+
+                @forelse ($recentReactions as $reaction)
+                    <div class="border-b py-2 text-sm flex justify-between items-center">
+                        <div>
+                            <a href="{{ route('tracks.show', $reaction->track) }}" class="font-semibold text-indigo-600 hover:underline">
+                                {{ $reaction->track->title }}
+                            </a>
+                            <p class="text-xs text-gray-500">
+                                {{ $reaction->created_at->diffForHumans() }}
+                            </p>
+                        </div>
+                        <div>
+                            @php
+                                $icons = [
+                                    'like'    => '👍',
+                                    'dislike' => '👎',
+                                    'laugh'   => '😂',
+                                    'wow'     => '😮',
+                                    'sad'     => '😢',
+                                ];
+                            @endphp
+                            <span class="text-xl">
+                                {{ $icons[$reaction->type] ?? '❓' }}
+                            </span>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-sm text-gray-500">You haven’t reacted to any tracks yet.</p>
+                @endforelse
+            </div>
+
+            @if($recentSharedTracks->isNotEmpty())
+                <div class="bg-white shadow sm:rounded-lg p-4">
+                    <h3 class="text-lg font-semibold mb-3">Shared with you</h3>
+                    @foreach($recentSharedTracks as $track)
+                        <div class="mb-2 text-xs">
+                            <a href="{{ route('tracks.show', $track) }}"
+                                class="text-indigo-600 hover:underline">
+                                {{ $track->title }}
+                            </a>
+                            <span class="text-gray-500">
+                                by {{ $track->owner->artist_name ?? 'Unknown' }}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
         </div>
 
     </div>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\TrackController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\TrackController as AdminTrackController;
@@ -14,6 +15,7 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     //Dashboard Route
     Route::get('/dashboard', [TrackController::class, 'index'])->name('dashboard');
+    Route::get('/activity', [ActivityController::class, 'index'])->name('activity.index');
     
     //Track Routes
     Route::get('/tracks/upload', [TrackController::class, 'create'])->name('tracks.upload.form');
