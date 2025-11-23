@@ -93,14 +93,9 @@
                 @endforeach
 
                 @if($recentTracks->isEmpty())
-                    <div class="border-t border-gray-300 mt-4">
-                        <h2><strong>No tracks found.</strong></h2>
-                        <img src="{{ asset('img/empty-demon.png') }}" 
-                        alt="Empty Container Demon"
-                        class=""
-                        width="120" 
-                        height="120">
-                    </div>
+                    <x-empty-container
+                        title="No tracks found."
+                        message="Upload a track to get started." />
                 @endif
             </div>
         </div>
