@@ -23,22 +23,14 @@
 
         <div class="bg-white shadow sm:rounded-lg overflow-hidden">
             <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50 text-gray-500 uppercase tracking-wide">
-                <tr class="border-b text-left text-gray-500">
-                    <th class="py-2 pr-4">
-                        Cover
-                    </th>
-                    <th class="py-2 pr-4">
-                        Title
-                    </th>
-                    <th class="py-2 pr-4">
-                        Artist
-                    </th>
-                    <th class="py-2 pr-4">
-                        Plays
-                    </th>
-                    <th class="py-2 pr-4"></th>
-                </tr>
+                <thead class="bg-gray-50 text-gray-500 uppercase tracking-wide">
+                    <tr class="border-b text-left text-gray-500">
+                        <th class="px-4 py-2">Cover</th>
+                        <th class="px-4 py-2">Title</th>
+                        <th class="px-4 py-2">Artist</th>
+                        <th class="px-4 py-2 text-center">Plays</th>
+                        <th class="px-4 py-2"></th>
+                    </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                 @forelse ($tracks as $track)
