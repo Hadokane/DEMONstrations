@@ -64,6 +64,17 @@
                         Comments: {{ $track->comments->count() }},
                         Reactions: {{ $track->reactions->count() }}
                     </p>
+                    <form action="{{ route('admin.tracks.destroy', $track) }}"
+                            method="POST"
+                            class="inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                                class="text-xs text-red-600 hover:underline"
+                                onclick="return confirm('Delete this track?')">
+                            Delete Track
+                        </button>
+                    </form>
                 </div>
             @empty
                 <p class="text-sm text-gray-500">No tracks uploaded.</p>
@@ -87,7 +98,9 @@
                     <form method="POST" action="{{ route('admin.comments.destroy', $comment) }}" class="mt-1">
                         @csrf
                         @method('DELETE')
-                        <button class="text-xs text-red-600 hover:underline">
+                        <button type="submit"
+                            class="text-xs text-red-600 hover:underline"
+                            onclick="return confirm('Delete this comment?')">
                             Delete Comment
                         </button>
                     </form>

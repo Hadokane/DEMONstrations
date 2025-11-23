@@ -5,7 +5,7 @@
 
     <div class="container mx-auto mt-6">
         <div class="mt-4 mb-4 grid grid-cols-2 gap-6">
-                <h1 class="text-2xl font-bold mb-4">🎧 Your Dashboard</h1>
+            <h1 class="text-2xl font-bold mb-4">🎧 Your Dashboard</h1>
             <div class="flex justify-end m-2">
                 <a href="{{ route('tracks.upload.form') }}">
                     <x-primary-button>
@@ -130,7 +130,20 @@
                                 class="text-sm text-indigo-600 hover:underline">
                                 Edit
                             </a>
+
+                            <form action="{{ route('tracks.destroy', $track) }}"
+                                    method="POST"
+                                    class="inline ml-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="text-red-600 hover:underline text-sm"
+                                        onclick="return confirm('Delete this track?')">
+                                    Delete
+                                </button>
+                            </form>
                         @endif  
+
                     </div>
                 </div>
                 @endforeach
@@ -199,5 +212,6 @@
                 </div>
             </div>
         </div>
+
     </div>
 </x-app-layout>
