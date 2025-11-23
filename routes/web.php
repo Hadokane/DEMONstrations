@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/activity', [ActivityController::class, 'index'])->name('activity.index');
     
     //Track Routes
+    Route::get('/tracks/trending', [TrackController::class, 'trending'])->name('tracks.trending');
     Route::get('/tracks/upload', [TrackController::class, 'create'])->name('tracks.upload.form');
     Route::post('/tracks/upload', [TrackController::class, 'upload'])->name('tracks.upload');
     Route::get('/tracks/{track}', [TrackController::class, 'show'])->name('tracks.show');

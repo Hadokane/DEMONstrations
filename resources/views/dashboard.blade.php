@@ -32,18 +32,20 @@
                     @endphp
 
                 <div class="bg-white shadow rounded p-4 mb-4 flex">
-                    @if($track->cover_image_path)
-                        <img src="{{ asset('storage/'.$track->cover_image_path) }}"
-                            class="mr-4 w-48 h-48 object-cover rounded mr-4"
-                            alt="Cover image for {{ $track->title }}">
-                    @else
-                        <div class="mr-4 w-48 h-48 bg-gray-200 flex items-center justify-center rounded text-gray-500">
-                            No Cover
-                        </div>
-                    @endif
+                    <a href="{{ route('tracks.show', $track) }}">
+                        @if($track->cover_image_path)
+                                <img src="{{ asset('storage/'.$track->cover_image_path) }}"
+                                class="mr-4 w-48 h-48 object-cover rounded mr-4"
+                                alt="Cover image for {{ $track->title }}">
+                        @else
+                            <div class="mr-4 w-48 h-48 bg-gray-200 flex items-center justify-center rounded text-gray-500">
+                                No Cover
+                            </div>
+                            @endif
+                    </a>
 
                     <div class="flex-1">
-                        <h2 class="text-xl font-semibold"> 
+                        <h2 class="text-xl font-semibold hover:text-indigo-600"> 
                             <a href="{{ route('tracks.show', $track) }}">
                                 💿 {{ $track->title }}
                             </a>
@@ -120,7 +122,53 @@
                 @endif
             </div>
         </div>
+        
         <div>
+            @if($trendingTracks->isNotEmpty())
+                <div class="bg-white shadow rounded p-4 mb-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-lg font-semibold">🔥 Trending Tracks</h2>
+                        <a href="{{ route('tracks.trending') }}"
+                        class="text-xs text-indigo-600 hover:underline">
+                            View all
+                        </a>
+                    </div>
+
+                    <ul class="divide-y divide-gray-200">
+                        @foreach($trendingTracks as $t)
+                            <li class="py-2 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <a href="{{ route('tracks.show', $t) }}">
+                                    @if($t->cover_image_path)
+                                        <img src="{{ asset('storage/'.$t->cover_image_path) }}"
+                                            class="w-10 h-10 rounded object-cover" alt="Cover image for {{ $t->title }}">
+                                    @else
+                                        <div class="w-10 h-10 bg-gray-200 flex items-center justify-center rounded text-gray-500 text-xs">
+                                            No Cover
+                                        </div>
+                                    @endif
+                                    </a>
+
+                                    <div>
+                                        <a href="{{ route('tracks.show', $t) }}"
+                                        class="font-medium text-gray-900 hover:text-indigo-600">
+                                            {{ $t->title }}
+                                        </a>
+                                        <p class="text-xs text-gray-500">
+                                            {{ $t->owner->artist_name ?? 'Unknown artist' }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <p class="text-xs text-gray-500">
+                                    {{ $t->play_count }} plays
+                                </p>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="bg-white shadow rounded p-4 mb-4">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold mb-3">🗣️ Your Recent Comments</h3>

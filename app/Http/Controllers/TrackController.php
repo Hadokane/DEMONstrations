@@ -24,27 +24,28 @@ class TrackController extends Controller
             ->whereHas('accesses', fn ($q) => $q->where('user_id', $user->id))
             ->with('owner')
             ->latest()
-            ->limit(5)
+            ->limit(3)
             ->get();
 
-        // $recentTrendingTracks = Track::query()
-        //     ->where('reactions' > 2)
-        //     ->limit(5)
-        //     ->get();
+        $trendingTracks = Track::where('visibility', 'public')
+            ->with('owner')
+            ->orderByDesc('play_count')
+            ->limit(3)
+            ->get();
             
         $recentComments = $user->comments()
             ->with('track')
             ->latest()
-            ->limit(5)
+            ->limit(3)
             ->get();
 
         $recentReactions = $user->reactions()
             ->with('track')
             ->latest()
-            ->limit(5)
+            ->limit(3)
             ->get();
 
-        return view('dashboard', compact( 'user', 'recentTracks', 'recentSharedTracks', 'recentComments', 'recentReactions'));
+        return view('dashboard', compact( 'user', 'recentTracks',  'recentSharedTracks', 'trendingTracks',  'recentComments', 'recentReactions'));
     }
 
     public function show(Track $track)
@@ -199,6 +200,31 @@ class TrackController extends Controller
         return redirect()
             ->route('dashboard')
             ->with('status', 'Track deleted.');
+    }
+
+    public function trending(Request $request)
+    {
+        $search = $request->query('search');
+
+        $query = Track::where('visibility', 'public')
+            ->with('owner');
+
+        if ($search) 
+        {
+            $query->where(function ($q) use ($search) 
+            {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhereHas('owner', fn ($q2) =>
+                        $q2->where('artist_name', 'like', "%{$search}%")
+                    );
+            });
+        }
+
+        $tracks = $query->orderByDesc('play_count')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('tracks.trending', compact('tracks', 'search'));
     }
 
 }
