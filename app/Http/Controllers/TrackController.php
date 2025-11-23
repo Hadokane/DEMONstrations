@@ -124,7 +124,6 @@ class TrackController extends Controller
         ]);
 
         $owner = $track->owner;
-
         if ($owner && $owner->id !== Auth::id()) {
             Notification::create([
                 'user_id' => $owner->id,
@@ -221,6 +220,18 @@ class TrackController extends Controller
 
         $track->save();
 
+        $actor = Auth::user();
+        if ($actor->is_admin && $actor->id !== $track->user_id) 
+        {
+            Notification::create([
+                'user_id' => $track->user_id,
+                'type'    => 'track_update',
+                'title'   => "{$actor->artist_name} updated your track",
+                'body'    => $track->title,
+                'link'    => route('tracks.show', $track),
+            ]);
+        }
+
         return redirect()
             ->route('tracks.show', $track)
             ->with('status', 'Track updated.');
@@ -229,6 +240,17 @@ class TrackController extends Controller
     public function destroy(Track $track)
     {
         $this->canManage($track);
+
+        $actor = Auth::user();
+        if ($actor->is_admin && $actor->id !== $track->user_id) {
+            Notification::create([
+                'user_id' => $track->user_id,
+                'type'    => 'track_delete',
+                'title'   => "{$actor->artist_name} deleted one of your tracks",
+                'body'    => $track->title,
+                'link'    => null,
+            ]);
+        }
 
         $track->delete();
 

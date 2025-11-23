@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Notification;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
@@ -142,6 +144,18 @@ class UserController extends Controller
 
         if (!empty($data['password'])) {
             $user->update(['password' => Hash::make($data['password'])]);
+        }
+
+        $actor = Auth::user();
+        if ($actor->id !== $user->id && $actor->is_admin) 
+        {
+            Notification::create([
+                'user_id' => $user->id,
+                'type'    => 'account_update',
+                'title'   => "{$actor->artist_name} updated your account",
+                'body'    => 'An administrator has updated your profile.',
+                'link'    => route('profile.edit'),
+            ]);
         }
 
         return redirect()->route('admin.users.show', $user)
